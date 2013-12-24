@@ -11,6 +11,7 @@ import stripe
 from store.email import send_sale_email
 from store.forms import BuySomethingForm, DonationForm, MemberLoginForm
 from store.models import Product, Sale, ItemSale
+from store.utils import log_member_in, member_is_logged_in
 
 
 def member_login(request, next):
@@ -18,13 +19,13 @@ def member_login(request, next):
         data=request.POST if request.method == 'POST' else None
     )
     if request.method == 'POST' and form.is_valid():
-        request.session['member'] = True
+        log_member_in(request)
         return redirect(next)
     return render(request, 'store/member_login.html', {'form': form})
 
 
 def store_view(request, pagename):
-    if pagename == 'member' and 'member' not in request.session:
+    if pagename == 'member' and not member_is_logged_in(request):
         return redirect('member_login', next=request.path)
 
     products = Product.objects.all()
@@ -70,7 +71,6 @@ def store_view(request, pagename):
         forms.append(form)
 
     if request.method == 'POST':
-        print("GOT A POST")
         if all(form.is_valid() for form in forms):
             sale = Sale()
             for product in products:
@@ -81,7 +81,6 @@ def store_view(request, pagename):
                 else:
                     quantity = form.cleaned_data['quantity'] or 0
                 if quantity > 0:
-                    print("GOT A PURCHASE!  %d of %s" % (quantity, product))
                     if not sale.pk:
                         sale.save()
                     ItemSale.objects.create(
@@ -90,8 +89,6 @@ def store_view(request, pagename):
                         quantity=quantity,
                         per_item_price=product.price,
                     )
-                else:
-                    print("DID NOT BUY: %s" % product)
             if sale.pk:
                 # They're buying something
                 # Stick the sale pk in the session
@@ -99,8 +96,6 @@ def store_view(request, pagename):
                 return redirect('review')
             messages.info(request, "Didn't order anything")
             return redirect('store')
-        else:
-            print("SOME FORM NOT VALID")
 
     context = {
         'products': products,
