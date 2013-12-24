@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Review selected purchases</h1>
+
+    {% if sale.complete %}
+    <p>This sale has been completed.
+    You can
+<a href="{% url 'store' %}">Return to the Store</a>.
+    </p>
+    {% else %}
+<p>Here's what we think you asked to purchase.</p>
+<p>If you want to make changes, use your browser's Back button to return
+to the previous page.</p>
+<p>If you've changed your mind completely, you can
+<a href="{% url 'store' %}">Return to the Store</a>.</p>
+    {% endif %}
+
+<table border="0">
+<tr>
+    <th>Quantity</th>
+    <th>Each</th>
+    <th>Subtotal</th>
+    <th>Item</th>
+    <th>Description</th>
+</tr>
+    {% for item in sale.items.all %}
+        <tr>
+        <td> {# quantity #}
+            {% if not item.product.group.donation %}
+                {{ item.quantity }}
+            {% endif %}
+        </td>
+        <td> {# each #}
+            {% if not item.product.group.donation %}
+            ${{ item.per_item_price }}
+            {% endif %}
+        </td>
+
+        <td> {# subtotal #}
+           ${{ item.amount }}
+        </td>
+
+        <td>{{ item.product.name1 }}
+        {% if item.product.name2 %}
+            - {{ item.product.name2 }}</td>
+        {% endif %}
+        <td>{{ item.product.description }}</td>
+        </tr>
+    {% endfor %}
+
+    <tr>
+        <td colspan="5"><hr/></td>
+    </tr>
+
+    <tr>
+        <th colspan="2">Total</th>
+        <td>${{ sale.total }}</td>
+    </tr>
+
+</table>
+
+    {% if not sale.complete %}
+<p>If this all looks good to you, click the big blue button:</p>
+
+<form method="POST">
+    {% csrf_token %}
+<script
+    src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+    data-key="pk_test_h1Rjaw8iMLGHiFGOna2JXaZd"
+    data-amount="{{ amount_in_cents }}"
+    data-name="Voices Store"
+    data-description="Misc. (${{ sale.total }})"
+    data-image="/128x128.png">
+  </script>
+</form>
+    {% endif %}
+{% endblock %}

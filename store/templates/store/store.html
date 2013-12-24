@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+    <h1>{{ title }}</h1>
+    <form method='POST'>
+        {% csrf_token %}
+
+        {% regroup products by group as group_list %}
+        {% for i in group_list %}
+            {% with group=i.grouper grouped_products=i.list %}
+                {% include 'store/group.html' %}
+            {% endwith %}
+        {% endfor %}
+
+    <br/>
+    <input type="submit"/>
+    </form>
+{% endblock %}

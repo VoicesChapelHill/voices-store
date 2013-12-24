@@ -1,0 +1,25 @@
+<tr>
+    <td>&nbsp;</td>
+    <th colspan="2">{{  name1 }}</th>
+</tr>
+{%  for product in subproducts %}
+    <tr>
+        <td>
+            {% if product.group.donation %}
+              ${{ product.form.amount }}
+            {% else %}
+                {{ product.form.quantity }}
+            {% endif %}
+        </td>
+        <td>{{  product.name2 }}</td>
+        {% if not product.group.donation %}
+            <td>${{ product.price }}</td>
+        {% endif %}
+        {% if product.description %}
+            <td>{{ product.description }}</td>
+        {% endif %}
+        {% if product.form.errors %}
+            <th>{{ product.form.errors }}</th>
+        {% endif %}
+    </tr>
+{%  endfor %}

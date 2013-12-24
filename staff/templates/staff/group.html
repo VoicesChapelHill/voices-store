@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h1>Product group report: {{ group.name }}</h1>
+
+    <h2>By product</h2>
+    {% for product in group.products.all %}
+        <h3>{{ product }}</h3>
+        {% for itemsale in product.completed_sales %}
+            {{ itemsale.sale.when }}
+            {{ itemsale.sale.who }}
+            {{ itemsale }}
+            <br/>
+        {% endfor %}
+        {% if not group.donation %}
+        Total quantity: {{ product.total_quantity }}<br/>
+        {% endif %}
+        Total amount: ${{ product.total_amount }}
+    {% endfor %}
+
+{% endblock %}

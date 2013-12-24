@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+<head>
+    <title>{% block title %}Voices Store{% endblock %}</title>
+</head>
+<body>
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+{% if user.is_authenticated %}{{ user }}
+  {% if user.is_staff %}|<a href="{% url 'staff_home' %}">Staff home</a>{% else %}(not staff){% endif %}
+{% endif %}
+<a href="{% url 'store' %}">Voices Store</a>
+|<a href="{% url 'member_view' %}">Member Store</a>
+
+{% block content %}
+{% endblock %}
+</body>
+</html>

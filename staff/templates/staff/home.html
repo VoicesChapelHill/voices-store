@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Staff home</h1>
+
+    <h2>Product Group Reports</h2>
+    <ul>
+    {% for group in product_groups %}
+        <li>
+            <a href="{% url 'group_report' group.pk %}">{{ group.name }}</a>
+           ${{ group.total_sales }}
+        </li>
+    {% endfor %}
+    </ul>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Member Login Required</h1>
+
+    <p>Password is on the member information sheet distributed at
+    the first rehearsal.</p>
+
+    <form method='POST'>
+        {% csrf_token %}
+        {{ form }}
+    </form>
+{% endblock %}
