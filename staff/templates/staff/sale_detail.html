@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2>Voices purchase</h2>
+
+<dl class="dl-horizontal">
+    <dt>Date:</dt>      <dd>{{ sale.when }}</dd>
+    <dt>Charge ID:</dt> <dd>{{ sale.charge_id }}</dd>
+    <dt>Card:</dt>      <dd>{{ sale.charge.card.type }} ending in {{ sale.charge.card.last4 }}</dd>
+    <dt>Cardholder:</dt>  <dd>{{ sale.charge.card.name }}</dd>
+</dl>
+
+<table class="table">
+    {% for item in sale.items.all %}
+        <tr>
+            {% if item.product.group.donation %}
+                <td>&nbsp;</td><td colspan="2">Donation</td>  <td>${{ item.amount }}</td>
+            {% else %}
+                <td>{{ item.quantity }}</td><td>{{ item.product }}</td><td>{{ item.per_item_price }}</td> <td>${{ item.amount }}</td>
+            {% endif %}
+        </tr>
+    {% endfor %}
+
+    <tr>
+        <th colspan="3">Total:</th>   <td>${{ sale.total }}</td>
+    </tr>
+
+</table>
+
+If you have any issues, please contact treasurer@voiceschapelhill.org
+and provide the Charge ID above.
+
+{% endblock %}

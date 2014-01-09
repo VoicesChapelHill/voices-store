@@ -8,7 +8,8 @@ https://docs.djangoproject.com/en/1.6/howto/deployment/wsgi/
 """
 
 import os
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "myproject.settings")
+from voices_store.guess_settings import guess_settings
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", guess_settings())
 
 from django.core.wsgi import get_wsgi_application
 application = get_wsgi_application()

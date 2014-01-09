@@ -20,6 +20,12 @@ class TestStoreView(TestCase):
             public=True,
             members=False
         )
+        self.member_group = ProductGroup.objects.create(
+            display_start=now(),
+            display_end=now() + timedelta(days=2),
+            public=False,
+            members=True
+        )
 
     @mock.patch('store.views.member_is_logged_in')
     def test_member_not_logged_in(self, mock_member_is_logged_in):
@@ -39,8 +45,27 @@ class TestStoreView(TestCase):
         self.assertEqual(200, rsp.status_code)
 
     def test_store(self):
-        prod1 = mommy.make(Product, group=self.public_group)
-        prod2 = mommy.make(Product, group=self.public_group)
+        mommy.make(Product, group=self.public_group)
+        mommy.make(Product, group=self.public_group)
         rsp = self.client.get(self.url)
         products = rsp.context['products']
         self.assertEqual(2, len(products))
+
+    def test_public_only(self):
+        prod1 = mommy.make(Product, group=self.public_group)
+        mommy.make(Product, group=self.member_group)
+        rsp = self.client.get(self.url)
+        products = rsp.context['products']
+        self.assertEqual(1, len(products))
+        self.assertEqual(prod1.pk, products[0].pk)
+
+    @mock.patch('store.views.member_is_logged_in')
+    def test_members_only(self, mock_member_is_logged_in):
+        mock_member_is_logged_in.return_value = True
+        mommy.make(Product, group=self.public_group)
+        prod2 = mommy.make(Product, group=self.member_group)
+        rsp = self.client.get(self.member_url)
+        self.assertEqual(200, rsp.status_code)
+        products = rsp.context['products']
+        self.assertEqual(1, len(products))
+        self.assertEqual(prod2.pk, products[0].pk)

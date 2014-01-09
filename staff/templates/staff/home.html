@@ -4,12 +4,25 @@
     <h1>Staff home</h1>
 
     <h2>Product Group Reports</h2>
-    <ul>
+    <table class="table">
     {% for group in product_groups %}
-        <li>
-            <a href="{% url 'group_report' group.pk %}">{{ group.name }}</a>
-           ${{ group.total_sales }}
-        </li>
+        <tr>
+            <td>
+                <a href="{% url 'group_report' group.pk %}">{{ group.name }}</a>
+            </td>
+            <td style="text-align: right">
+                {% if not group.donation %}
+                    {{ group.quantity_sold }}
+                {% endif %}
+            </td>
+            <td style="text-align: right">
+                ${{ group.total_sales }}
+            </td>
+        </tr>
     {% endfor %}
-    </ul>
+    </table>
+
+    <h2>
+    <a href="{% url 'sales_report' %}">Individual sales</a>
+    </h2>
 {% endblock %}

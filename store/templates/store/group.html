@@ -1,12 +1,12 @@
 <h2>{{ group.name }}</h2>
-    <table>
-        <tr>
-            <th>{% if group.donation %}Amount{% else %}Quantity</th>{% endif %}
-        </tr>
-        {% regroup grouped_products by name1 as name1_list %}
-        {% for j in name1_list %}
-            {% with name1=j.grouper subproducts=j.list %}
-                {% include 'store/product.html' %}
-            {% endwith %}
-        {% endfor %}
-    </table>
+<table class="table">
+    <tr>
+        <th>{% if group.donation %}Amount{% else %}Quantity</th>{% endif %}
+    </tr>
+    {% regroup grouped_products by name1 as name1_list %}
+    {% for j in name1_list %}
+        {% with name1=j.grouper subproducts=j.list %}
+            {% include 'store/product.html' %}
+        {% endwith %}
+    {% endfor %}
+</table>

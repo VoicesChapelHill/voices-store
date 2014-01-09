@@ -2,6 +2,7 @@ from django.conf import settings
 from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils.timezone import now
+import stripe
 
 
 class ProductGroup(models.Model):
@@ -35,6 +36,14 @@ class ProductGroup(models.Model):
 
     def __str__(self):
         return self.name
+
+    def quantity_sold(self):
+        if self.donation:
+            return self.total_sales()
+        return sum([itemsale.quantity
+                    for itemsale in ItemSale.objects.filter(product__group=self,
+                                                            sale__complete=True)])
+
 
     def total_sales(self):
         return sum([itemsale.amount()
@@ -103,11 +112,13 @@ class Sale(models.Model):
     charge_id = models.CharField(blank=True, max_length=40,
                                  help_text="id of Stripe Charge object")
 
-    def __str__(self):
+    def kinds_of_things(self):
         product_groups = ProductGroup.objects.filter(products__itemsales__sale=self)
         s = ', '.join(pg.name for pg in product_groups)
+        return s
 
-        return "%s on %s ($%s; %s)" % (self.who, self.when, self.total(), s)
+    def __str__(self):
+        return "%s on %s ($%s; %s)[%s]" % (self.who, self.when, self.total(), self.kinds_of_things(), self.charge_id)
 
     def total(self):
         return sum([i.amount() for i in self.items.all()])
@@ -119,6 +130,22 @@ class Sale(models.Model):
             for user in item.product.group.to_notify.all():
                 emails.add(user.email)
         return emails
+
+    @property
+    def charge(self):
+        """
+        Return the Strip Charge object for this sale
+        This requires an API call to Stripe so don't call it trivially
+        """
+        # We cache it the first time we look it up, in case we're referring to
+        # this repeatedly in a template
+        if hasattr(self, '_charge'):
+            return getattr(self, '_charge')
+        if not self.charge_id:
+            return None
+        stripe.api_key = settings.STRIPE_SECRET_KEY
+        setattr(self, '_charge', stripe.Charge.retrieve(self.charge_id, expand=['card']))
+        return getattr(self, '_charge')
 
 
 class ItemSale(models.Model):
@@ -134,7 +161,10 @@ class ItemSale(models.Model):
                                          help_text="Price in dollars for one of this product at the time of this sale")
 
     def __str__(self):
-        return "%d of %s" % (self.quantity, self.product)
+        if self.product.group.donation:
+            return "$%s %s" % (self.amount(), self.product)
+        else:
+            return "%d of %s" % (self.quantity, self.product)
 
     def amount(self):
         return self.quantity * self.per_item_price

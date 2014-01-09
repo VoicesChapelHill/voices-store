@@ -29,6 +29,9 @@ class DonationForm(forms.Form):
         required=False,
         decimal_places=2,
         min_value=Decimal('0.00'),
+        widget=forms.TextInput(
+            attrs={'size': '6'}
+        )
     )
 
 

@@ -4,7 +4,8 @@ from django.contrib.auth.decorators import login_required
 
 # FIXME: require voices staff
 from django.shortcuts import render, get_object_or_404
-from store.models import ProductGroup
+from django.views.generic import ListView, DetailView
+from store.models import ProductGroup, Sale
 
 
 @login_required
@@ -21,3 +22,11 @@ def group_report(request, group_pk):
         'group': group,
     }
     return render(request, 'staff/group.html', context)
+
+
+class SalesListView(ListView):
+    model = Sale
+
+
+class SaleDetailView(DetailView):
+    model = Sale

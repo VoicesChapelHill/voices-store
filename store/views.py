@@ -105,6 +105,10 @@ def store_view(request, pagename):
 
 
 def review_view(request):
+    """
+    GET: review what user is about to buy
+    POST: buy it
+    """
     sale_pk = request.session['sale']
     sale = get_object_or_404(Sale, pk=sale_pk)
     amount_in_cents = int(100 * sale.total())
@@ -154,6 +158,10 @@ def review_view(request):
 
 
 def complete_view(request, key):
+    """
+    Show a completed sale
+    """
+
     # 'key' is the charge_id
     sale = get_object_or_404(Sale, charge_id=key)
 
