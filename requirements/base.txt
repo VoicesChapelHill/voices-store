@@ -2,6 +2,6 @@ Django==1.6.1
 psycopg2==2.5.1
 South==0.8.4
 
---index-url https://code.stripe.com
+--extra-index-url https://code.stripe.com
 stripe==1.11.0
 
