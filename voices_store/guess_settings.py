@@ -6,6 +6,9 @@ logger = logging.getLogger(__name__)
 
 
 def guess_settings():
+
+    print("Running as user: %s" % os.environ['LOGNAME'])
+
     # Return name of a settings module to use given the current environment
     #hostname = socket.getfqdn()
     #logger.info("hostname=%s" % hostname)
