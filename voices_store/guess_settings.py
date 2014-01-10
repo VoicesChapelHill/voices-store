@@ -5,9 +5,15 @@ import os
 logger = logging.getLogger(__name__)
 
 
+def dumpenv():
+    keys = sorted(os.environ.keys())
+    for k in keys:
+        print("%s=%s" % (k, os.environ[k]))
+
+
 def guess_settings():
 
-    print("Running as user: %s" % os.environ['LOGNAME'])
+    dumpenv()
 
     # Return name of a settings module to use given the current environment
     #hostname = socket.getfqdn()
