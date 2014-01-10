@@ -86,3 +86,11 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
+# This is from me:
+APP_DIR = os.path.dirname(BASE_DIR)  # APP_DIR is the dir containing manage.py etc.
+# So put static_root parallel to our other top-level dirs
+STATIC_ROOT = os.path.join(APP_DIR, 'static_root')
+
+# Default - put them in our own dir (will override in dokku settings as it won't work there)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(APP_DIR, 'media_root')
