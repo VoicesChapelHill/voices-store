@@ -4,7 +4,8 @@
     <h1>Staff home</h1>
 
     <h2>Product Group Reports</h2>
-    <table class="table">
+    <table class="table table-striped">
+    <tbody>
     {% for group in product_groups %}
         <tr>
             <td>
@@ -20,6 +21,7 @@
             </td>
         </tr>
     {% endfor %}
+    </tbody>
     </table>
 
     <h2>

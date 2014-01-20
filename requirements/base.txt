@@ -4,4 +4,3 @@ South==0.8.4
 
 --extra-index-url https://code.stripe.com
 stripe==1.11.0
-

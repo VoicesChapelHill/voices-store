@@ -12,8 +12,13 @@ class Migration(SchemaMigration):
         db.create_table('store_productgroup', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=128)),
+            ('description', self.gf('django.db.models.fields.TextField')(blank=True)),
+            ('url', self.gf('django.db.models.fields.URLField')(blank=True, max_length=200)),
             ('display_start', self.gf('django.db.models.fields.DateTimeField')()),
-            ('display_end', self.gf('django.db.models.fields.DateTimeField')()),
+            ('display_end', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
+            ('public', self.gf('django.db.models.fields.BooleanField')()),
+            ('members', self.gf('django.db.models.fields.BooleanField')()),
+            ('donation', self.gf('django.db.models.fields.BooleanField')(default=False)),
         ))
         db.send_create_signal('store', ['ProductGroup'])
 
@@ -29,10 +34,11 @@ class Migration(SchemaMigration):
         # Adding model 'Product'
         db.create_table('store_product', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('name1', self.gf('django.db.models.fields.CharField')(max_length=128)),
-            ('name2', self.gf('django.db.models.fields.CharField')(blank=True, max_length=128)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=128)),
             ('price', self.gf('django.db.models.fields.DecimalField')(max_digits=6, decimal_places=2)),
+            ('description', self.gf('django.db.models.fields.TextField')(blank=True)),
             ('group', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['store.ProductGroup'], related_name='products')),
+            ('url', self.gf('django.db.models.fields.URLField')(blank=True, max_length=200)),
         ))
         db.send_create_signal('store', ['Product'])
 
@@ -46,16 +52,18 @@ class Migration(SchemaMigration):
         # Adding model 'Sale'
         db.create_table('store_sale', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('when', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2013, 12, 14, 0, 0))),
-            ('who', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['store.Customer'])),
+            ('when', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2014, 1, 20, 0, 0))),
+            ('who', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['store.Customer'], null=True)),
             ('comments', self.gf('django.db.models.fields.TextField')(blank=True)),
+            ('complete', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('charge_id', self.gf('django.db.models.fields.CharField')(blank=True, max_length=40)),
         ))
         db.send_create_signal('store', ['Sale'])
 
         # Adding model 'ItemSale'
         db.create_table('store_itemsale', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('product', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['store.Product'])),
+            ('product', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['store.Product'], related_name='itemsales')),
             ('quantity', self.gf('django.db.models.fields.PositiveSmallIntegerField')()),
             ('sale', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['store.Sale'], related_name='items')),
             ('per_item_price', self.gf('django.db.models.fields.DecimalField')(max_digits=6, decimal_places=2)),
@@ -88,7 +96,7 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'Group'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '80', 'unique': 'True'}),
-            'permissions': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'to': "orm['auth.Permission']", 'symmetrical': 'False'})
+            'permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Permission']", 'blank': 'True', 'symmetrical': 'False'})
         },
         'auth.permission': {
             'Meta': {'ordering': "('content_type__app_label', 'content_type__model', 'codename')", 'unique_together': "(('content_type', 'codename'),)", 'object_name': 'Permission'},
@@ -102,7 +110,7 @@ class Migration(SchemaMigration):
             'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'email': ('django.db.models.fields.EmailField', [], {'blank': 'True', 'max_length': '75'}),
             'first_name': ('django.db.models.fields.CharField', [], {'blank': 'True', 'max_length': '30'}),
-            'groups': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'to': "orm['auth.Group']", 'symmetrical': 'False', 'related_name': "'user_set'"}),
+            'groups': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Group']", 'blank': 'True', 'related_name': "'user_set'", 'symmetrical': 'False'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'is_staff': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
@@ -110,11 +118,11 @@ class Migration(SchemaMigration):
             'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'last_name': ('django.db.models.fields.CharField', [], {'blank': 'True', 'max_length': '30'}),
             'password': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
-            'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'to': "orm['auth.Permission']", 'symmetrical': 'False', 'related_name': "'user_set'"}),
+            'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Permission']", 'blank': 'True', 'related_name': "'user_set'", 'symmetrical': 'False'}),
             'username': ('django.db.models.fields.CharField', [], {'max_length': '30', 'unique': 'True'})
         },
         'contenttypes.contenttype': {
-            'Meta': {'ordering': "('name',)", 'unique_together': "(('app_label', 'model'),)", 'db_table': "'django_content_type'", 'object_name': 'ContentType'},
+            'Meta': {'db_table': "'django_content_type'", 'ordering': "('name',)", 'unique_together': "(('app_label', 'model'),)", 'object_name': 'ContentType'},
             'app_label': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
@@ -129,32 +137,40 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'ItemSale'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'per_item_price': ('django.db.models.fields.DecimalField', [], {'max_digits': '6', 'decimal_places': '2'}),
-            'product': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['store.Product']"}),
+            'product': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['store.Product']", 'related_name': "'itemsales'"}),
             'quantity': ('django.db.models.fields.PositiveSmallIntegerField', [], {}),
             'sale': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['store.Sale']", 'related_name': "'items'"})
         },
         'store.product': {
             'Meta': {'object_name': 'Product'},
+            'description': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'group': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['store.ProductGroup']", 'related_name': "'products'"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name1': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
-            'name2': ('django.db.models.fields.CharField', [], {'blank': 'True', 'max_length': '128'}),
-            'price': ('django.db.models.fields.DecimalField', [], {'max_digits': '6', 'decimal_places': '2'})
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
+            'price': ('django.db.models.fields.DecimalField', [], {'max_digits': '6', 'decimal_places': '2'}),
+            'url': ('django.db.models.fields.URLField', [], {'blank': 'True', 'max_length': '200'})
         },
         'store.productgroup': {
             'Meta': {'object_name': 'ProductGroup'},
-            'display_end': ('django.db.models.fields.DateTimeField', [], {}),
+            'description': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
+            'display_end': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'display_start': ('django.db.models.fields.DateTimeField', [], {}),
+            'donation': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'members': ('django.db.models.fields.BooleanField', [], {}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
-            'to_notify': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.User']", 'symmetrical': 'False'})
+            'public': ('django.db.models.fields.BooleanField', [], {}),
+            'to_notify': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.User']", 'symmetrical': 'False'}),
+            'url': ('django.db.models.fields.URLField', [], {'blank': 'True', 'max_length': '200'})
         },
         'store.sale': {
             'Meta': {'object_name': 'Sale'},
+            'charge_id': ('django.db.models.fields.CharField', [], {'blank': 'True', 'max_length': '40'}),
             'comments': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
+            'complete': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'when': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 12, 14, 0, 0)'}),
-            'who': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['store.Customer']"})
+            'when': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2014, 1, 20, 0, 0)'}),
+            'who': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['store.Customer']", 'null': 'True'})
         }
     }
 

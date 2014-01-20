@@ -18,10 +18,10 @@ admin.site.register(
     list_display=['when', 'complete', 'total', 'who'],
     list_filter=['complete']
 )
-admin.site.register(Product)
 
 admin.site.register(
     ProductGroup,
+    list_display=['name', 'display_start', 'display_end', 'public', 'members', 'donation'],
     filter_horizontal=['to_notify'],
     inlines=[ProductInline]
 )

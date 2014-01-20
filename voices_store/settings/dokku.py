@@ -10,4 +10,4 @@ STRIPE_PUBLISHABLE_KEY = os.environ['STRIPE_PUBLISHABLE_KEY']
 MEMBER_PASSWORD = os.environ['MEMBER_PASSWORD']
 
 # Media files in special container volume
-MEDIA_ROOT = '/container-media'
+#MEDIA_ROOT = '/container-media'

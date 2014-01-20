@@ -15,14 +15,17 @@ to the previous page.</p>
 <a href="{% url 'store' %}">Return to the Store</a>.</p>
     {% endif %}
 
-<table border="0">
-<tr>
+<table border="0" class="table table-striped">
+<thead>
+  <tr>
     <th>Quantity</th>
     <th>Each</th>
     <th>Subtotal</th>
     <th>Item</th>
     <th>Description</th>
-</tr>
+  </tr>
+</thead>
+<tbody>
     {% for item in sale.items.all %}
         <tr>
         <td> {# quantity #}
@@ -40,23 +43,18 @@ to the previous page.</p>
            ${{ item.amount }}
         </td>
 
-        <td>{{ item.product.name1 }}
-        {% if item.product.name2 %}
-            - {{ item.product.name2 }}</td>
-        {% endif %}
+        <td>{{ item.product.name }}</td>
         <td>{{ item.product.description }}</td>
         </tr>
     {% endfor %}
-
+</tbody>
+<tfoot>
     <tr>
-        <td colspan="5"><hr/></td>
+        <th colspan="2" class="active">Total</th>
+        <td class="success">${{ sale.total }}</td>
+        <td colspan="3"></td>
     </tr>
-
-    <tr>
-        <th colspan="2">Total</th>
-        <td>${{ sale.total }}</td>
-    </tr>
-
+</tfoot>
 </table>
 
     {% if not sale.complete %}

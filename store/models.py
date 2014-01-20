@@ -8,7 +8,17 @@ import stripe
 class ProductGroup(models.Model):
     """A group of products with some settings in common"""
     name = models.CharField(max_length=128,
-                            help_text="name of the product group (displayed on web page)")
+                            help_text="name of the product group (displayed on web page). "
+                                      "Should uniquely identify the group for all time. E.g. "
+                                      "Tickets for Fall 2013 Voices Concert")
+    description = models.TextField(
+        blank=True,
+        help_text="More description of the product group."
+    )
+    url = models.URLField(
+        blank=True,
+        help_text="Link for more information about this product group. Optional."
+    )
     to_notify = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
         help_text="Users to notify when sales occur and with period reports"
@@ -17,6 +27,7 @@ class ProductGroup(models.Model):
         help_text="Products will not be displayed before this time"
     )
     display_end = models.DateTimeField(
+        blank=True, null=True,
         help_text="Products will not be displayed after this time"
     )
 
@@ -44,7 +55,6 @@ class ProductGroup(models.Model):
                     for itemsale in ItemSale.objects.filter(product__group=self,
                                                             sale__complete=True)])
 
-
     def total_sales(self):
         return sum([itemsale.amount()
                     for itemsale in ItemSale.objects.filter(product__group=self,
@@ -57,23 +67,26 @@ class Product(models.Model):
     'Ticket for 2013 Dec. 14 8pm concert, general admission'
     """
 
-    name1 = models.CharField(
+    name = models.CharField(
         max_length=128,
-        help_text="Part of the product name that could be common across variations, e.g. '2013 T-shirt'")
-    name2 = models.CharField(
-        max_length=128,
-        help_text="Part of the product name that could vary, e.g. 'Small' (can be blank)",
-        blank=True,
+        help_text="The name is the part of the product name "
+                  "that could be common across variations, e.g. if group is '2013 T-shirts', "
+                  "name might be 'Men's Small'."
     )
     price = models.DecimalField(decimal_places=2, max_digits=6,
                                 help_text="Price in dollars for one of this product currently.")
     description = models.TextField(
-        blank=True
+        blank=True,
+        help_text="Longer description expanding on the product. Optional."
     )
     group = models.ForeignKey(ProductGroup, related_name='products')
+    url = models.URLField(
+        blank=True,
+        help_text="Link for more information about this product. Optional."
+    )
 
     def __str__(self):
-        return "%s/%s" % (self.name1, self.name2) if self.name2 else self.name1
+        return "%s - %s" % (self.group.name, self.name) if self.group else self.name
 
     def completed_sales(self):
         return ItemSale.objects.filter(product=self, sale__complete=True)
@@ -131,6 +144,15 @@ class Sale(models.Model):
                 emails.add(user.email)
         return emails
 
+    def num_items(self):
+        number = 0
+        for item in self.items.all():
+            if item.product.group.donation:
+                number += 1
+            else:
+                number += item.quantity
+        return number
+
     @property
     def charge(self):
         """
@@ -159,6 +181,11 @@ class ItemSale(models.Model):
     sale = models.ForeignKey(Sale, related_name='items')
     per_item_price = models.DecimalField(decimal_places=2, max_digits=6,
                                          help_text="Price in dollars for one of this product at the time of this sale")
+
+    class Meta(object):
+        unique_together = (
+            ('product', 'sale'),
+        )
 
     def __str__(self):
         if self.product.group.donation:

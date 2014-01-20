@@ -2,6 +2,7 @@
 {% block title %}{{ title }}{% endblock %}
 {% block content %}
     <h1>{{ title }}</h1>
+  {% if products %}
     <form method='POST'>
         {% csrf_token %}
 
@@ -13,6 +14,9 @@
         {% endfor %}
 
     <br/>
-    <input type="submit"/>
+    <button type="submit" class="btn btn-primary">Submit</button>
     </form>
+  {% else %}
+    <p>Nothing for sale right now.</p>
+  {% endif %}
 {% endblock %}

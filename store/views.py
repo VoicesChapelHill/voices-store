@@ -3,6 +3,7 @@ from decimal import Decimal
 from django.conf import settings
 from django.contrib import messages
 from django.core.exceptions import ImproperlyConfigured
+from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.timezone import now
 
@@ -29,10 +30,18 @@ def store_view(request, pagename):
         return redirect('member_login', next=request.path)
 
     products = Product.objects.all()
+    sale = None
+    if 'sale' in request.session:
+        try:
+            sale = Sale.objects.get(pk=request.session['sale'])
+        except Sale.DoesNotExist:
+            pass
 
     TIME = now()
-    products = products.filter(group__display_start__lte=TIME,
-                               group__display_end__gte=TIME)
+    products = products.filter(
+        Q(group__display_end__gte=TIME) | Q(group__display_end__isnull=True),
+        group__display_start__lte=TIME,
+    )
 
     if pagename == 'member':
         products = products.filter(group__members=True)
@@ -50,11 +59,15 @@ def store_view(request, pagename):
 
     forms = []
     for product in products:
+        quantity = 0
+        if sale:
+            for item_sale in sale.items.filter(product=product):
+                quantity += item_sale.quantity
         if product.group.donation:
             form = DonationForm(
                 prefix=product.pk,
                 initial={
-                    'amount': Decimal('0.00'),
+                    'amount': Decimal(quantity / 100.00),
                 },
                 data=data
             )
@@ -63,7 +76,7 @@ def store_view(request, pagename):
                 prefix=product.pk,
                 initial={
                     'product': product,
-                    'quantity': 0,
+                    'quantity': quantity,
                 },
                 data=data
             )
@@ -72,7 +85,7 @@ def store_view(request, pagename):
 
     if request.method == 'POST':
         if all(form.is_valid() for form in forms):
-            sale = Sale()
+            sale = sale or Sale()
             for product in products:
                 form = product.form
                 if product.group.donation:
@@ -83,12 +96,18 @@ def store_view(request, pagename):
                 if quantity > 0:
                     if not sale.pk:
                         sale.save()
-                    ItemSale.objects.create(
-                        product=product,
-                        sale=sale,
-                        quantity=quantity,
-                        per_item_price=product.price,
-                    )
+                    if sale.items.filter(product=product).exists():
+                        item_sale = sale.items.get(product=product)
+                        item_sale.quantity = quantity
+                        item_sale.per_item_price = product.price
+                        item_sale.save()
+                    else:
+                        ItemSale.objects.create(
+                            product=product,
+                            sale=sale,
+                            quantity=quantity,
+                            per_item_price=product.price,
+                        )
             if sale.pk:
                 # They're buying something
                 # Stick the sale pk in the session
@@ -100,6 +119,7 @@ def store_view(request, pagename):
     context = {
         'products': products,
         'title': title,
+        'cart': sale,
     }
     return render(request, 'store/store.html', context)
 
@@ -153,6 +173,7 @@ def review_view(request):
         'sale': sale,
         'amount_in_cents': amount_in_cents,
         'stripe_key': settings.STRIPE_PUBLISHABLE_KEY,
+        'cart': sale,
     }
     return render(request, 'store/review.html', context)
 

@@ -1,5 +1,5 @@
 <!doctype html>{% load staticfiles %}
-<html>
+<html lang="en">
 <head>
     <title>{% block title %}Voices Store{% endblock %}</title>
 
@@ -7,7 +7,7 @@
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
     <!-- Optional theme -->
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap-theme.css">
 
     <link rel="stylesheet" href="{% static 'css/site.css' %}">
 
@@ -30,14 +30,19 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="{% url 'store' %}">Voices Store</a>
+          <a class="navbar-brand" href="{% url 'store' %}"><img height="20px" src="{{ STATIC_URL }}img/Voices logo.png" alt="Voices"> Store</a>
         </div>
+
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
             <li><a href="{% url 'member_view' %}">Member Store</a></li>
             {% if user.is_staff %}
                 <li><a href="{% url 'staff_home' %}">Staff home</a></li>
                 <li><a href="/admin/">Admin</a></li>
+                <li><a href="{% url 'admin:logout' %}?next=/">Log out</a></li>
+            {% endif %}
+            {% if cart %}
+              <li><a href="{% url 'review' %}">Cart: {{ cart.num_items }} item{{ cart.num_items|pluralize }}</a></li>
             {% endif %}
           </ul>
         </div><!--/.nav-collapse -->
