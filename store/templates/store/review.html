@@ -8,7 +8,7 @@
 <a href="{% url 'store' %}">Return to the Store</a>.
     </p>
     {% else %}
-<p>Here's what we think you asked to purchase.</p>
+<p>Here's what you've asked to purchase.</p>
 <p>If you want to make changes, use your browser's Back button to return
 to the previous page.</p>
 <p>If you've changed your mind completely, you can
@@ -64,11 +64,11 @@ to the previous page.</p>
     {% csrf_token %}
 <script
     src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-    data-key="pk_test_h1Rjaw8iMLGHiFGOna2JXaZd"
+    data-key="{{ stripe_key }}"  {# pk_test_h1Rjaw8iMLGHiFGOna2JXaZd #}
     data-amount="{{ amount_in_cents }}"
     data-name="Voices Store"
     data-description="Misc. (${{ sale.total }})"
-    data-image="/128x128.png">
+    data-image="{{ STATIC_URL }}img/Voices logo.png">
   </script>
 </form>
     {% endif %}

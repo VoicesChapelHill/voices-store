@@ -14,10 +14,10 @@ def dumpenv():
 
 def guess_settings():
 
-    dumpenv()
+    #dumpenv()
 
-    logname = pwd.getpwuid(os.getuid())[0]
-    print("logname=%s" % logname)
+    #logname = pwd.getpwuid(os.getuid())[0]
+    #print("logname=%s" % logname)
 
     # Return name of a settings module to use given the current environment
     if os.path.exists('.heroku'):

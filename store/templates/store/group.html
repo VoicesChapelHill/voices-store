@@ -1,42 +1,41 @@
-<h2>{{ group.name }}</h2>
-{% if group.description %}
-  <p>{{ group.description }}</p>
-{% endif %}
-{% if group.display_end %}
-  <p>Available until {{ group.display_end }}.</p>
-{% endif %}
-<table class="table">
-    <tr>
-        <th>{% if group.donation %}Amount{% else %}Quantity</th>{% endif %}
-    </tr>
-    {% if group.donation %}
-      {% for product in grouped_products %}
-        <tr>
-          <td>${{ product.form.amount }}</td>
-          <td>{{ product.name }}</td>
-        </tr>
-      {% endfor %}
-    {% else %}
-      {% for product in grouped_products %}
-        {% if product.form.errors %}
-          <tr>
-            <td>FIXME: {{ product.form.errors }}</td>
-          </tr>
-        {% endif %}
-        <tr>
-          <td>{{ product.form.quantity }}</td>
-          <td>${{ product.price }}</td>
-          <td>
-            {% if product.url %}
-              <a href="{{ product.url }}">{{ product.name }}</a>
-            {% else %}
-              {{ product.name }}
-            {% endif %}
-          </td>
-          {% if product.description %}
-            <td>{{ product.description }}</td>
-          {% endif %}
-        </tr>
-      {% endfor %}
+<div class="row">
+  <h2>{{ group.name }}</h2>
+  {% if group.description %}
+    <p>{{ group.description }}</p>
+  {% endif %}
+  {% if group.url %}
+    <p><a href="{{ group.url }}">More information</a></p>
+  {% endif %}
+  {% if group.display_end %}
+    <p>Available until {{ group.display_end }}.</p>
+  {% endif %}
+</div>
+
+<div class="row">
+  <div class="col-xs-1"><b>Quantity</b></div>
+  <div class="col-xs-1"><b>Each</b></div>
+</div>
+
+{% for product in grouped_products %}
+  {% if product.form.errors %}
+    <div class="row">
+      <div class="col-xs-12">
+        {{ product.form.errors }}
+      </div>
+    </div>
+  {% endif %}
+  <div class="form-group">
+    <div class="col-xs-1">{{ product.form.quantity }}</div>
+    <div class="col-xs-1">${{ product.price }}</div>
+    <label for="{{ product.form.quantity.id_for_label }}" class="col-xs-4">
+      {% if product.url %}
+        <a href="{{ product.url }}">{{ product.name }}</a>
+      {% else %}
+        {{ product.name }}
+      {% endif %}
+    </label>
+    {% if product.description %}
+      <div class="col-xs-6">{{ product.description }}</div>
     {% endif %}
-</table>
+  </div>
+{% endfor %}

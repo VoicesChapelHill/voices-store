@@ -35,7 +35,6 @@
 
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li><a href="{% url 'member_view' %}">Member Store</a></li>
             {% if user.is_staff %}
                 <li><a href="{% url 'staff_home' %}">Staff home</a></li>
                 <li><a href="/admin/">Admin</a></li>
@@ -43,6 +42,9 @@
             {% endif %}
             {% if cart %}
               <li><a href="{% url 'review' %}">Cart: {{ cart.num_items }} item{{ cart.num_items|pluralize }}</a></li>
+            {% endif %}
+            {%  if not member_logged_in %}
+              <li><a href="{% url 'member_login' next=request.path %}">Members</a></li>
             {% endif %}
           </ul>
         </div><!--/.nav-collapse -->
