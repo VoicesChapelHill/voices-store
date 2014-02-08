@@ -11,6 +11,7 @@ urlpatterns = patterns(
     '',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^staff/', include('staff.urls', app_name='staff')),
+     (r'', include('django_browserid.urls')),
     url(r'^', include('store.urls')),
 )
 
@@ -21,3 +22,5 @@ for name in required:
     if not hasattr(settings, name):
         raise ImproperlyConfigured(
             "Required setting '%s' is missing. Required settings are %r" % (name, required))
+
+import django_browserid as db

@@ -2,46 +2,46 @@
 {% block title %}{{ title }}{% endblock %}
 {% block content %}
   <h1>{{ title }}</h1>
-
-  <form method='POST' class="form-horizontal" role="form">
-    {% csrf_token %}
-
-    {% regroup products by group as group_list %}
-    {% for i in group_list %}
-      {% with group=i.grouper grouped_products=i.list %}
-        {% include 'store/group.html' %}
-      {% endwith %}
-    {% endfor %}
-
-    <div class="row">
-      <h2>Make a donation to Voices</h2>
-    </div>
-    {% for product in donation_products %}
-
-      product.form.amount={{ product.form.amount }}<br/>
-      product.form.amount.id_for_label={{ product.form.amount.id_for_label }}<br/>
-      product.form.amount.name={{ product.form.amount.name }}<br/>
-
-      <div class="row">
-        <div class="col-xs-2">
-          <div class="input-group">
-            <span class="input-group-addon">$</span>
-            <input type="text" class="form-control"
-                   name="{{ product.form.amount.html_name }}"
-                   id="{{ product.form.amount.id_for_label }}"
-                   value="{{ product.form.amount.value }}"
-                >
-          </div>
-        </div>
-        <div class="col-cs-4"><label for="{{ product.form.amount.id_for_label }}">{{ product.name }}</label></div>
-      </div>
-    {% endfor %}
-
-    <div class="row">
-      <div class="col-xs-1">
-        <button type="submit" class="btn btn-primary">Add to cart</button>
-      </div>
-    </div>
-
-  </form>
+{##}
+{#  <form method='POST' class="form-horizontal" role="form">#}
+{#    {% csrf_token %}#}
+{##}
+{#    {% regroup products by group as group_list %}#}
+{#    {% for i in group_list %}#}
+{#      {% with group=i.grouper grouped_products=i.list %}#}
+{#        {% include 'store/group.html' %}#}
+{#      {% endwith %}#}
+{#    {% endfor %}#}
+{##}
+{#    <div class="row">#}
+{#      <h2>Make a donation to Voices</h2>#}
+{#    </div>#}
+{#    {% for product in donation_products %}#}
+{##}
+{#      product.form.amount={{ product.form.amount }}<br/>#}
+{#      product.form.amount.id_for_label={{ product.form.amount.id_for_label }}<br/>#}
+{#      product.form.amount.name={{ product.form.amount.name }}<br/>#}
+{##}
+{#      <div class="row">#}
+{#        <div class="col-xs-2">#}
+{#          <div class="input-group">#}
+{#            <span class="input-group-addon">$</span>#}
+{#            <input type="text" class="form-control"#}
+{#                   name="{{ product.form.amount.html_name }}"#}
+{#                   id="{{ product.form.amount.id_for_label }}"#}
+{#                   value="{{ product.form.amount.value }}"#}
+{#                >#}
+{#          </div>#}
+{#        </div>#}
+{#        <div class="col-cs-4"><label for="{{ product.form.amount.id_for_label }}">{{ product.name }}</label></div>#}
+{#      </div>#}
+{#    {% endfor %}#}
+{##}
+{#    <div class="row">#}
+{#      <div class="col-xs-1">#}
+{#        <button type="submit" class="btn btn-primary">Add to cart</button>#}
+{#      </div>#}
+{#    </div>#}
+{##}
+{#  </form>#}
 {% endblock %}

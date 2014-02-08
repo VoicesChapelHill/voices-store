@@ -36,7 +36,10 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # 3rd party:
     'south',
+    'django_browserid',  # Load after auth
+    # This project:
     'accounting',
     'store',
     'staff',
@@ -106,3 +109,29 @@ STATIC_ROOT = os.path.join(APP_DIR, 'static_root')
 # Default - put them in our own dir (will override in dokku settings as it won't work there)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(APP_DIR, 'media_root')
+
+
+# Add the django_browserid authentication backend.
+AUTHENTICATION_BACKENDS = (
+   'django.contrib.auth.backends.ModelBackend', # required for admin
+   'django_browserid.auth.BrowserIDBackend',
+)
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+    "django.contrib.auth.context_processors.auth",
+    "django.core.context_processors.debug",
+    "django.core.context_processors.i18n",
+    "django.core.context_processors.media",
+    "django.core.context_processors.static",
+    "django.core.context_processors.tz",
+    "django.contrib.messages.context_processors.messages",
+    'django_browserid.context_processors.browserid',
+)
+
+# Set your site url for security
+BROWSERID_AUDIENCES = [
+    'http://0.0.0.0:8000',
+    'https://store.voiceschapelhill.org',
+]
+
+LOGIN_REDIRECT_URL = '/'
