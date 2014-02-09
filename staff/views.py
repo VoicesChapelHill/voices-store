@@ -1,14 +1,16 @@
 
-from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.core.urlresolvers import reverse
+from django.shortcuts import render, redirect
+from users.views import please_login
 
 
-# FIXME: require voices staff
-from django.shortcuts import render, get_object_or_404
-from django.views.generic import ListView, DetailView
-
-
-@login_required
 def home(request):
+    if not request.user.is_authenticated():
+        return please_login(request)
+    if not request.user.voices_staff:
+        messages.error(request, "Sorry, you're not authorized for that page")
+        return redirect(reverse('store'))
     context = {
     }
     return render(request, 'staff/home.html', context)
