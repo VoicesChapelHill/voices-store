@@ -41,7 +41,7 @@ class VoicesUser(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=60)
     last_name = models.CharField(max_length=80)
     is_staff = models.BooleanField(
-        _('staff status'), default=False,
+        _('Django staff status'), default=False,
         help_text=_('Designates whether the user can log into this admin '
                     'site.'))
     is_active = models.BooleanField(

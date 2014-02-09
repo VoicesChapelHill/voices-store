@@ -39,6 +39,7 @@ INSTALLED_APPS = (
     # 3rd party:
     'south',
     'django_browserid',  # Load after auth
+    'bootstrap3',
     # This project:
     'accounting',
     'store',

@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load i18n %}{% load bootstrap3 %}
+
+{% block title %}{% trans "Contact Voices Store" %}{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-md-10 col-md-offset-1">
+    <section id="contact-form" class="contact-form-container right">
+      <h2 class="text-center registration-wide-margin">Contact Voices Store</h2>
+
+
+<form method="post" class="form">
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    {% buttons %}
+        <button type="submit" class="btn btn-primary">
+            {% bootstrap_icon "star" %} Submit
+        </button>
+    {% endbuttons %}
+
+    </section>
+  </div>
+  <div class="col-md-1"></div>
+</div>
+{% endblock %}

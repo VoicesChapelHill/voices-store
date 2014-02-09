@@ -1,0 +1,5 @@
+{% if user.is_authenticated %}Authenticated email: {{ email }}
+{% else %}Unathenticated email: {{ email }}
+{% endif %}
+
+{{ body }}

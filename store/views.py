@@ -3,16 +3,18 @@ from decimal import Decimal
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
+from django.template.loader import render_to_string
 from django.utils.timezone import now
 
 import stripe
 
 from store.email import send_sale_email
 #from store.forms import BuySomethingForm, DonationForm, MemberLoginForm
-from store.forms import MemberLoginForm
+from store.forms import MemberLoginForm, ContactForm
 from store.models import Product
 from store.utils import log_member_in
 
@@ -192,3 +194,37 @@ def store_view(request):
 #         'charge': charge,
 #     }
 #     return render(request, 'store/complete.html', context)
+
+
+def help_view(request):
+    return render(request, 'help.html')
+
+
+def contact_view(request):
+    if request.user.is_authenticated():
+        email = request.user.email
+    else:
+        email = None
+    if request.method == 'POST':
+        form = ContactForm(email=email, data=request.POST)
+        if form.is_valid():
+            subject = "Contact form: %s" % form.cleaned_data['subject']
+            email = email or form.cleaned_data['email_address']
+            body = render_to_string('emails/contact_form.txt',
+                                    {'body': form.cleaned_data['body'],
+                                     'email': email,
+                                     'user': request.user})
+            send_mail(
+                subject=subject,
+                message=body,
+                from_email=email,
+                recipient_list=settings.CONTACT_EMAILS,
+            )
+            messages.info(
+                request,
+                "Thank you!  Your message has been sent to the site administrators. "
+                "If you have a question or problem, someone will contact you.")
+            return redirect(request.path)
+    else:
+        form = ContactForm(email=email)
+    return render(request, 'contact.html', {'form': form})
