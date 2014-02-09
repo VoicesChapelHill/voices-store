@@ -17,11 +17,14 @@ from store.email import send_sale_email
 from store.forms import MemberLoginForm, ContactForm
 from store.models import Product
 from store.utils import log_member_in
+from users.views import please_login
 
 
-@login_required
 def member_login(request, next):
+    if not request.user.is_authenticated():
+        return please_login(request)
     if request.user.is_member:
+        messages.info(request, "You are a Voices member")
         return redirect(next or reverse('store'))
     form = MemberLoginForm(
         data=request.POST if request.method == 'POST' else None

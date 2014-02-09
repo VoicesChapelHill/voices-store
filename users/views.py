@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.core.urlresolvers import reverse
-from django.shortcuts import redirect
+from django.core.urlresolvers import reverse, reverse_lazy
+from django.shortcuts import redirect, render
 from django.views.generic import UpdateView
 from users.models import VoicesUser
 
@@ -18,7 +18,13 @@ class ProfileView(UpdateView):
         return reverse('store')
 
 
-@login_required
+def please_login(request):
+    context = {
+        'next': request.path,
+    }
+    return render(request, "please_login.html", context)
+
+
 def logged_in_view(request):
     """User has just logged in"""
     user = request.user
@@ -26,3 +32,21 @@ def logged_in_view(request):
         return redirect(reverse('store'))
     messages.info(request, "Please tell us a little more about yourself")
     return redirect(reverse('profile', args=[user.pk]))
+
+
+def change_email_view(request):
+    if not request.user.is_authenticated():
+        return please_login(request)
+    messages.info(request, "To change the email on your account, please use the contact form. "
+                           "Just tell us what you want the new email address to be. "
+                           "We'll send a message to the new address to verify that it's yours, "
+                           "then change the address on your account.")
+    return redirect(reverse('contact'))
+
+
+def delete_account_view(request):
+    if not request.user.is_authenticated():
+        return please_login(request)
+    messages.info(request, "To delete your account, please use the contact form "
+                           "and ask us to delete your account.")
+    return redirect(reverse('contact'))

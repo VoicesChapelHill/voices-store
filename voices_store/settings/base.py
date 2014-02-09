@@ -140,6 +140,7 @@ BROWSERID_AUDIENCES = [
 BROWSERID_CREATE_USER = 'users.utils.create_user'
 
 LOGIN_REDIRECT_URL = reverse_lazy('logged_in')
+LOGIN_URL = reverse_lazy('browserid.login')
 
 
 AUTH_USER_MODEL = 'users.VoicesUser'

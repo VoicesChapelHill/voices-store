@@ -56,7 +56,12 @@
                   <li><a href="/admin/">Admin</a></li>
               {% endif %}
             {% else %}
-              <li>{% browserid_login text='Sign In/Sign Up'  %}</li>
+
+              {% if next %}
+                <li>{% browserid_login text='Sign In/Sign Up' next=next %}</li>
+              {% else %}
+                <li>{% browserid_login text='Sign In/Sign Up'  %}</li>
+              {% endif %}
             {% endif %}
 
             {% if cart %}
@@ -77,6 +82,10 @@
     <div class="voices-content">
     <div class="container">
         {% bootstrap_messages %}
+
+        <noscript>
+          <div class="alert alert-danger">Please enable Javascript! This site will not work properly without it.</div>
+        </noscript>
 
         {% block content %}
         {% endblock %}

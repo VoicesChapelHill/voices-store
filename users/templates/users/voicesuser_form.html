@@ -11,6 +11,9 @@
 
   </form>
 
+  <p><a href="{% url 'change_email' %}">Change email address</a></p>
+  <p><a href="https://login.persona.org/">Change my password</a></p>
+
   <p>{{ voicesuser }}</p>
 
   {% if not voicesuser.is_member %}
