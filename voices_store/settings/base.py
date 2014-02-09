@@ -10,6 +10,8 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+from django.core.urlresolvers import reverse_lazy
+
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
@@ -137,7 +139,7 @@ BROWSERID_AUDIENCES = [
 ]
 BROWSERID_CREATE_USER = 'users.utils.create_user'
 
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = reverse_lazy('logged_in')
 
 
 AUTH_USER_MODEL = 'users.VoicesUser'

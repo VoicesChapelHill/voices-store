@@ -52,7 +52,8 @@ def store_view(request):
     #     group__donation=True,
     # )
 
-    if request.user.is_member:
+    user = request.user
+    if user.is_authenticated() and user.is_member:
         title = 'Member Store'
     else:
         title = 'Voices Store'

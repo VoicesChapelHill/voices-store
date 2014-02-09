@@ -46,8 +46,9 @@
             <li><a href="{% url 'store' %}">Store</a></li>
             {% if user.is_authenticated %}
               <li><a href="{% url 'browserid.logout' %}" class="browserid-logout" data-next="/" >
-                <span>Logout<br/>{{ user }}</span>
+                <span>Logout</span>
               </a></li>
+              <li><a href="{% url 'profile' user.pk %}">{{ user }}</a></li>
               {% if user.voices_staff %}
                   <li><a href="{% url 'staff_home' %}">Staff home</a></li>
               {% endif %}
@@ -55,7 +56,7 @@
                   <li><a href="/admin/">Admin</a></li>
               {% endif %}
             {% else %}
-              <li>{% browserid_login text='Login'  %}</li>
+              <li>{% browserid_login text='Sign In/Sign Up'  %}</li>
             {% endif %}
 
             {% if cart %}
@@ -72,17 +73,11 @@
       </div>
     </div>
 
-    {% bootstrap_messages %}
-{#{% if messages %}#}
-{#<ul class="messages">#}
-{#    {% for message in messages %}#}
-{#    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>#}
-{#    {% endfor %}#}
-{#</ul>#}
-{#{% endif %}#}
 
     <div class="voices-content">
     <div class="container">
+        {% bootstrap_messages %}
+
         {% block content %}
         {% endblock %}
     </div>

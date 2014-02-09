@@ -59,6 +59,7 @@ class VoicesUser(AbstractBaseUser, PermissionsMixin):
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
+    DESIRED_FIELDS = ['first_name', 'last_name']
 
     class Meta:
         verbose_name = _('user')
@@ -69,3 +70,7 @@ class VoicesUser(AbstractBaseUser, PermissionsMixin):
 
     def get_short_name(self):
         return self.first_name
+
+    def is_complete(self):
+        """Has user filled in all the fields we want them to?"""
+        return all([getattr(self, name, None) for name in self.DESIRED_FIELDS])

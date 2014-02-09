@@ -1,0 +1,25 @@
+{% extends 'base.html' %}{% load bootstrap3 %}
+
+{% block content %}
+  <form method="post" class="form">
+    {% csrf_token %} {% bootstrap_form form %}
+
+    {% buttons %}
+      <button type="submit" class="btn btn-primary">
+      {% bootstrap_icon "star" %} Submit</button>
+    {% endbuttons %}
+
+  </form>
+
+  <p>{{ voicesuser }}</p>
+
+  {% if not voicesuser.is_member %}
+    <p>You are not authenticated as a voices member. If you are a member and would
+    like to do that, you can do so <a href="{% url 'member_login' next=request.path %}">here</a>.</p>
+  {% else %}
+    <p>Voices member</p>
+  {% endif %}
+  {% if voicesuser.voices_staff %}
+    <p>Voices staff</p>
+  {% endif %}
+{% endblock %}
