@@ -43,9 +43,13 @@
           <ul class="nav navbar-nav">
             <li><a href="{% url 'store' %}">Store</a></li>
             {% if user.is_authenticated %}
-              <li>{% browserid_logout text='Logout' %}</li>
-              {% if user.is_staff %}
+              <li><a href="{% url 'browserid.logout' %}" class="browserid-logout" data-next="/" >
+                <span>Logout<br/>{{ user }}</span>
+              </a></li>
+              {% if user.voices_staff %}
                   <li><a href="{% url 'staff_home' %}">Staff home</a></li>
+              {% endif %}
+              {% if user.is_staff %}
                   <li><a href="/admin/">Admin</a></li>
               {% endif %}
             {% else %}
@@ -58,7 +62,7 @@
                 <a href="{% url 'review' %}">{{ cart.num_items }} item{{ cart.num_items|pluralize }}</a>
               </li>
             {% endif %}
-            {% if not member_logged_in %}
+            {% if not user.is_member %}
               <li><a href="{% url 'member_login' next=request.path %}">Members</a></li>
             {% endif %}
           </ul>

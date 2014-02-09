@@ -11,5 +11,9 @@ class Account(models.Model):
 class Klass(models.Model):
     name = models.CharField(max_length=80)
 
+    class Meta(object):
+        verbose_name = 'Class'
+        verbose_name_plural = 'Classes'
+
     def __str__(self):
         return self.name

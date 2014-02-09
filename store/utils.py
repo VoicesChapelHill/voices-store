@@ -1,6 +1,4 @@
-def member_is_logged_in(request):
-    return request.session.get('member', False)
-
-
 def log_member_in(request):
-    request.session['member'] = True
+    if not request.user.voices_member:
+        request.user.voices_member = True
+        request.user.save()

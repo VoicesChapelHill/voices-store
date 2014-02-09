@@ -2,6 +2,7 @@ from decimal import Decimal
 
 from django.conf import settings
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
@@ -13,10 +14,13 @@ from store.email import send_sale_email
 #from store.forms import BuySomethingForm, DonationForm, MemberLoginForm
 from store.forms import MemberLoginForm
 from store.models import Product
-from store.utils import log_member_in, member_is_logged_in
+from store.utils import log_member_in
 
 
+@login_required
 def member_login(request, next):
+    if request.user.is_member:
+        return redirect(next or reverse('store'))
     form = MemberLoginForm(
         data=request.POST if request.method == 'POST' else None
     )
@@ -46,7 +50,7 @@ def store_view(request):
     #     group__donation=True,
     # )
 
-    if member_is_logged_in(request):
+    if request.user.is_member:
         title = 'Member Store'
     else:
         title = 'Voices Store'

@@ -43,6 +43,7 @@ INSTALLED_APPS = (
     'accounting',
     'store',
     'staff',
+    'users',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -62,7 +63,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.static",
     "django.core.context_processors.tz",
     "django.contrib.messages.context_processors.messages",
-    "store.template_context.member_logged_in",
 )
 
 ROOT_URLCONF = 'voices_store.urls'
@@ -122,6 +122,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.debug",
     "django.core.context_processors.i18n",
     "django.core.context_processors.media",
+    'django.core.context_processors.request',
     "django.core.context_processors.static",
     "django.core.context_processors.tz",
     "django.contrib.messages.context_processors.messages",
@@ -133,5 +134,9 @@ BROWSERID_AUDIENCES = [
     'http://0.0.0.0:8000',
     'https://store.voiceschapelhill.org',
 ]
+BROWSERID_CREATE_USER = 'users.utils.create_user'
 
 LOGIN_REDIRECT_URL = '/'
+
+
+AUTH_USER_MODEL = 'users.VoicesUser'

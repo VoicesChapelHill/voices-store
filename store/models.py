@@ -117,6 +117,7 @@ class Product(models.Model):
     pricing = models.PositiveSmallIntegerField(
         choices=PRICE_STRATEGY_CHOICES,
         default=PRICE_ONE,
+        help_text="How this item is priced"
     )
     prices = models.ManyToManyField('store.Price')
     special_instructions_prompt = models.TextField(
@@ -146,6 +147,7 @@ class Product(models.Model):
     )
     klass = models.ForeignKey(
         'accounting.Klass',
+        verbose_name='class',
     )
 
     def __str__(self):
@@ -155,7 +157,7 @@ class Product(models.Model):
 class Price(models.Model):
     name = models.CharField(
         max_length=80,
-        help_text="If product has multiple prices, the name field must identify which price"
+        help_text="If product has multiple prices, the name field must identify which price "
                   "the user should pick.  E.g. 'General Admission' or 'Student'",
     )
     amount = models.DecimalField(decimal_places=2, max_digits=8)
