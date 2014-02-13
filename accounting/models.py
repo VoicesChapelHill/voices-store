@@ -1,3 +1,7 @@
+"""
+The Voices chart of accounts assigns an Account and a Class
+to each transaction.
+"""
 from django.db import models
 
 

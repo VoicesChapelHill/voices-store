@@ -4,14 +4,14 @@ from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
-from django.utils.timezone import now
+# from django.utils.timezone import now
 
-import stripe
+# import stripe
 
-from store.email import send_sale_email
+# from store.email import send_sale_email
 #from store.forms import BuySomethingForm, DonationForm, MemberLoginForm
 from store.forms import MemberLoginForm, ContactForm
-from store.models import Product
+# from store.models import Product
 from store.utils import log_member_in
 from users.views import please_login
 
@@ -39,7 +39,7 @@ def store_view(request):
     #     except Sale.DoesNotExist:
     #         pass
 
-    TIME = now()
+    # TIME = now()
     # products = Product.objects.filter(
     #     Q(group__display_end__gte=TIME) | Q(group__display_end__isnull=True),
     #     group__display_start__lte=TIME,
@@ -58,10 +58,10 @@ def store_view(request):
         title = 'Voices Store'
         # products = products.exclude(group__members=True)
 
-    if request.method == 'POST':
-        data = request.POST
-    else:
-        data = None
+    # if request.method == 'POST':
+    #     data = request.POST
+    # else:
+    #     data = None
     #
     # forms = []
     # for product in products:

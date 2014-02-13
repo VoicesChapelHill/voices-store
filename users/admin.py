@@ -18,6 +18,4 @@ admin.site.register(
                                        'groups', 'user_permissions')}),
         (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
     )
-
-
 )

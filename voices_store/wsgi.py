@@ -18,6 +18,6 @@ from voices_store.guess_settings import guess_settings
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", guess_settings())
 
 from django.core.wsgi import get_wsgi_application
-from dj_static import Cling, MediaCling
+from dj_static import Cling  # , MediaCling
 #application = Cling(MediaCling(get_wsgi_application()))
 application = Cling(get_wsgi_application())

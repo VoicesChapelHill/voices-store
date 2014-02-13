@@ -1,5 +1,6 @@
-from django.conf.urls import patterns, url
-#from staff.views import SalesListView, SaleDetailView
+# TBD
+from django.conf.urls import patterns
+# from staff.views import SalesListView, SaleDetailView
 
 urlpatterns = patterns(
     'staff.views',
