@@ -1,10 +1,10 @@
-{% extends 'base.html' %}{% load browserid %}
+{% extends 'base.html' %}
 {% block content %}
   <h1>Help</h1>
   <h2>Accounts</h2>
   <p>I want help with:</p>
   <ul>
-  <li>{% browserid_login text='Create an account' %}</li>
+  <li>Create an account</li>
   <li><a href="{% url 'member_login' next=request.path %}">Prove I'm a member</a></li>
   {% if request.user.is_authenticated %}
     <li><a href="{% url 'profile' user.pk %}">Change my name or other details</a></li>
@@ -12,7 +12,7 @@
     <li>Change my name or other details: Sign in (link at top), then click your name or email address
     in the top bar</li>
   {% endif %}
-  <li><a href="https://login.persona.org/">Change my password</a></li>
+  <li>Change my password</li>
   <li>I forgot my password: start logging in and look for the "Forgot your password?" link</li>
   <li>I forgot which email address I used on this site: use the <a href="{% url 'contact' %}">contact form</a>
   to contact the administrators. Tell us your name and we'll look it up for you.</li>

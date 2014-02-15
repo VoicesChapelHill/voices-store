@@ -1,6 +1,5 @@
 Django==1.6.2
 django-bootstrap3
-git+https://github.com/mozilla/django-browserid.git@e0674517b38b99f55924604b7ddd8b5a85aab258
 psycopg2==2.5.1
 South==0.8.4
 

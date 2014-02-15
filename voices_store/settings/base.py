@@ -22,7 +22,6 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     # 3rd party:
     'south',
-    'django_browserid',  # Load after auth
     'bootstrap3',
     # This project:
     'accounting',
@@ -92,12 +91,6 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(APP_DIR, 'media_root')
 
 
-# Add the django_browserid authentication backend.
-AUTHENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend',  # required for admin
-    'django_browserid.auth.BrowserIDBackend',
-)
-
 TEMPLATE_CONTEXT_PROCESSORS = (
     "django.contrib.auth.context_processors.auth",
     "django.core.context_processors.debug",
@@ -107,17 +100,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.static",
     "django.core.context_processors.tz",
     "django.contrib.messages.context_processors.messages",
-    'django_browserid.context_processors.browserid',
 )
 
-# Set your site url for security
-BROWSERID_AUDIENCES = [
-    'http://0.0.0.0:8000',
-    'https://store.voiceschapelhill.org',
-]
-BROWSERID_CREATE_USER = 'users.utils.create_user'
-
 LOGIN_REDIRECT_URL = reverse_lazy('logged_in')
-LOGIN_URL = reverse_lazy('browserid.login')
 
 AUTH_USER_MODEL = 'users.VoicesUser'

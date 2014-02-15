@@ -12,7 +12,6 @@ urlpatterns = patterns(
     url(r'^admin/', include(admin.site.urls)),
     url(r'^staff/', include('staff.urls', app_name='staff')),
     url(r'^users/', include('users.urls')),
-    url(r'', include('django_browserid.urls')),
     url(r'^', include('store.urls')),
 )
 

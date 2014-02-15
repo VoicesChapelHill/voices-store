@@ -1,4 +1,4 @@
-<!doctype html>{% load staticfiles browserid bootstrap3 %}
+<!doctype html>{% load staticfiles bootstrap3 %}
 <html lang="en">
 <head>
     <title>{% block title %}Voices Store{% endblock %}</title>
@@ -20,7 +20,6 @@
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
     <![endif]-->
-    {% browserid_css %}
     {% bootstrap_css %}
     {% block extra_css %}{% endblock %}
 </head>
@@ -45,9 +44,9 @@
           <ul class="nav navbar-nav">
             <li><a href="{% url 'store' %}">Store</a></li>
             {% if user.is_authenticated %}
-              <li><a href="{% url 'browserid.logout' %}" class="browserid-logout" data-next="/" >
+              <li>
                 <span>Logout</span>
-              </a></li>
+              </li>
               <li><a href="{% url 'profile' user.pk %}">{{ user }}</a></li>
               {% if user.voices_staff %}
                   <li><a href="{% url 'staff_home' %}">Staff home</a></li>
@@ -57,11 +56,6 @@
               {% endif %}
             {% else %}
 
-              {% if next %}
-                <li>{% browserid_login text='Sign In/Sign Up' next=next %}</li>
-              {% else %}
-                <li>{% browserid_login text='Sign In/Sign Up'  %}</li>
-              {% endif %}
             {% endif %}
 
             {% if cart %}
@@ -111,7 +105,6 @@
     <script src="https://code.jquery.com/jquery.js"></script>
     <!-- Latest compiled and minified JavaScript -->
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
-    {% browserid_js %}
     {% bootstrap_javascript %}
     {% block extra_js %}{% endblock %}
 </body>
