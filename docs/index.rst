@@ -14,6 +14,15 @@ Contents:
    user
    staff
 
+Running locally
+---------------
+
+Make virtualenv with Python 3.3, e.g. ``mkvirtualenv -p /usr/bin/python3.3 voices_store``
+``pip install -r requirements/dev.txt``
+Set SITE_ID=1 in environment
+``cp voices_store/settings/local.py-example voices_store/settings/local.py``
+edit local.py
+python manage.py runserver
 
 
 Indices and tables

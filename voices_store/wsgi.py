@@ -14,8 +14,7 @@ logger = logging.getLogger(__name__)
 logger.info("In voices_store/wsgi.py")
 
 
-from voices_store.guess_settings import guess_settings
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", guess_settings())
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", 'voices_store.settings.base')
 
 from django.core.wsgi import get_wsgi_application
 from dj_static import Cling  # , MediaCling

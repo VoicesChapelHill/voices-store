@@ -7,7 +7,7 @@ from django.test import TestCase
 from django.utils.timezone import now
 import mock
 from model_mommy import mommy
-from store.models import ProductGroup, Product
+from store.models import Product
 
 
 class TestStoreView(TestCase):

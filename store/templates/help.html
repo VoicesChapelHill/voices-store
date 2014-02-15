@@ -4,7 +4,7 @@
   <h2>Accounts</h2>
   <p>I want help with:</p>
   <ul>
-  <li>Create an account</li>
+  <li><a href="{% url 'account_signup' %}">Create an account</a></li>
   <li><a href="{% url 'member_login' next=request.path %}">Prove I'm a member</a></li>
   {% if request.user.is_authenticated %}
     <li><a href="{% url 'profile' user.pk %}">Change my name or other details</a></li>
@@ -16,7 +16,7 @@
   <li>I forgot my password: start logging in and look for the "Forgot your password?" link</li>
   <li>I forgot which email address I used on this site: use the <a href="{% url 'contact' %}">contact form</a>
   to contact the administrators. Tell us your name and we'll look it up for you.</li>
-  <li><a href="{% url 'change_email' %}">Change my email address</a></li>
+  <li><a href="{% url 'account_email' %}">Change my email address</a></li>
   <li><a href="{% url 'delete_account' %}">Delete my account</a></li>
   </ul>
   <h2>Buying</h2>

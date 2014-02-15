@@ -1,6 +1,7 @@
-from .dev import *  # noqa
-
+# Only needed for local development
+# Copy to local.py and edit, of course
+SECRET_KEY = 'xxx'
 STRIPE_SECRET_KEY = 'xxx'
 STRIPE_PUBLISHABLE_KEY = 'xxx'
 MEMBER_PASSWORD = 'xxx'
-SECRET_KEY = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+CONTACT_EMAILS = ['youremail@example.com']

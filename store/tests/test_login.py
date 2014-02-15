@@ -6,25 +6,25 @@ from mock import Mock
 import mock
 
 from store.forms import MemberLoginForm
-from store.utils import member_is_logged_in, log_member_in
+from store.utils import log_member_in
 
 
-class LoginUtilsTest(TestCase):
-    def test_not_logged_in(self):
-        request = Mock()
-        request.session = {}
-        self.assertFalse(member_is_logged_in(request))
-
-    def test_logged_in(self):
-        request = Mock()
-        request.session = {'member': True}
-        self.assertTrue(member_is_logged_in(request))
-
-    def test_log_member_in(self):
-        request = Mock(session={})
-        self.assertFalse(member_is_logged_in(request))
-        log_member_in(request)
-        self.assertTrue(member_is_logged_in(request))
+# class LoginUtilsTest(TestCase):
+#     def test_not_logged_in(self):
+#         request = Mock()
+#         request.session = {}
+#         self.assertFalse(member_is_logged_in(request))
+#
+#     def test_logged_in(self):
+#         request = Mock()
+#         request.session = {'member': True}
+#         self.assertTrue(member_is_logged_in(request))
+#
+#     def test_log_member_in(self):
+#         request = Mock(session={})
+#         self.assertFalse(member_is_logged_in(request))
+#         log_member_in(request)
+#         self.assertTrue(member_is_logged_in(request))
 
 
 class LoginTest(TestCase):

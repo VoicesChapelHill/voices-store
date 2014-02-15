@@ -24,7 +24,6 @@
     {% block extra_css %}{% endblock %}
 </head>
 <body>
-
     <!-- Wrap all page content here (for footer) -->
     <div id="wrap">
 
@@ -44,9 +43,7 @@
           <ul class="nav navbar-nav">
             <li><a href="{% url 'store' %}">Store</a></li>
             {% if user.is_authenticated %}
-              <li>
-                <span>Logout</span>
-              </li>
+              <li><a href="{% url 'account_logout' %}">Log out</a>
               <li><a href="{% url 'profile' user.pk %}">{{ user }}</a></li>
               {% if user.voices_staff %}
                   <li><a href="{% url 'staff_home' %}">Staff home</a></li>
@@ -55,7 +52,7 @@
                   <li><a href="/admin/">Admin</a></li>
               {% endif %}
             {% else %}
-
+              <li><a href="{% url 'account_login' %}">Log in</a></li>
             {% endif %}
 
             {% if cart %}
