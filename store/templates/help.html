@@ -12,8 +12,8 @@
     <li>Change my name or other details: Sign in (link at top), then click your name or email address
     in the top bar</li>
   {% endif %}
-  <li>Change my password</li>
-  <li>I forgot my password: start logging in and look for the "Forgot your password?" link</li>
+  <li><a href="{% url 'account_change_password' %}">Change my password</a></li>
+  <li><a href="{% url 'account_reset_password' %}">I forgot my password</a></li>
   <li>I forgot which email address I used on this site: use the <a href="{% url 'contact' %}">contact form</a>
   to contact the administrators. Tell us your name and we'll look it up for you.</li>
   <li><a href="{% url 'account_email' %}">Change my email address</a></li>

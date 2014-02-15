@@ -125,7 +125,7 @@ ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ACCOUNT_USER_MODEL_USERNAME_FIELD = 'email'
 ACCOUNT_USER_DISPLAY = lambda user: user.get_full_name().strip() or user.email
 
-LOGIN_REDIRECT_URL = reverse_lazy('logged_in')
+LOGIN_REDIRECT_URL = reverse_lazy('logged_in')  # if user hasn't given name, asks them for it
 
 AUTH_USER_MODEL = 'users.VoicesUser'
 

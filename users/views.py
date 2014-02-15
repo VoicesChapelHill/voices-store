@@ -33,16 +33,6 @@ def logged_in_view(request):
     return redirect(reverse('profile', args=[user.pk]))
 
 
-def change_email_view(request):
-    if not request.user.is_authenticated():
-        return please_login(request)
-    messages.info(request, "To change the email on your account, please use the contact form. "
-                           "Just tell us what you want the new email address to be. "
-                           "We'll send a message to the new address to verify that it's yours, "
-                           "then change the address on your account.")
-    return redirect(reverse('contact'))
-
-
 def delete_account_view(request):
     if not request.user.is_authenticated():
         return please_login(request)
