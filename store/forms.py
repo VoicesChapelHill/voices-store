@@ -1,8 +1,10 @@
+from decimal import Decimal
 from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.forms import PasswordInput
 from django.utils.translation import ugettext as _
+from store.models import OrderLine, Product
 
 
 class MemberLoginForm(forms.Form):
@@ -42,3 +44,42 @@ class ContactForm(SetFieldClassesMixin, forms.Form):
             # we have an authenticated email address
             self.email = email
             del self.fields['email_address']
+
+
+class ProductForm(forms.ModelForm):
+    class Meta(object):
+        model = Product
+
+    def clean(self):
+        if 'quantifiable' in self.cleaned_data and 'pricing' in self.cleaned_data:
+            quantifiable = self.cleaned_data['quantifiable']
+            pricing = self.cleaned_data['pricing']
+            if pricing == Product.PRICE_USER and quantifiable:
+                # Just force quantifiable
+                self.cleaned_data['quantifiable'] = False
+        return self.cleaned_data
+
+
+class OrderLineForm(forms.ModelForm):
+
+    class Meta(object):
+        model = OrderLine
+        fields = ['quantity', 'amount']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if not self.prefix:
+            if self.instance.price:
+                self.prefix = '%s_%s' % (self.instance.product.pk, self.instance.price.pk)
+            else:
+                self.prefix = '%s' % (self.instance.product.pk, )
+        if self.instance.product.pricing != Product.PRICE_USER:
+            del self.fields['amount']
+        if not self.instance.product.quantifiable:
+            del self.fields['quantity']
+
+    def has_any(self):
+        if self.instance.product.pricing == Product.PRICE_USER:
+            return self.cleaned_data['amount'] != Decimal('0.00')
+        else:
+            return self.cleaned_data['quantity'] != 0

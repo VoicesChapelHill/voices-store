@@ -64,6 +64,12 @@
             {% if not user.is_member %}
               <li><a href="{% url 'member_login' next=request.path %}">Members</a></li>
             {% endif %}
+            <li>
+              <a href="">
+                <span class="glyphicon glyphicon-shopping-cart"></span>
+                {{ sale.count_items }} item{{ sale.count_items|pluralize }}
+              </a>
+            </li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>

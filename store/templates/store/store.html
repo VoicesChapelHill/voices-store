@@ -2,6 +2,23 @@
 {% block title %}{{ title }}{% endblock %}
 {% block content %}
   <h1>{{ title }}</h1>
+  <h2>Products</h2>
+
+  {% for product in products %}
+    <div class="row">
+      <div class="col-xs-8">
+        <a href="{{ product.get_absolute_url }}">
+          {{ product.name }}
+        </a>  - {{ product.blurb }}
+        {% if product.draft %}
+          <span class="draft">DRAFT</span>
+        {% endif %}
+      </div>
+    </div>
+  {% endfor %}
+
+
+
 {##}
 {#  <form method='POST' class="form-horizontal" role="form">#}
 {#    {% csrf_token %}#}

@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load bootstrap3 %}
+
+{% block content %}
+  <h1>{{ product.name }}</h1>
+  {% if product.draft %}
+    <h2>DRAFT!!!!</h2>
+  {% endif %}
+  <div class="row">
+    <div class="col-xs-8">
+      {{ product.description }}
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-1">
+      {% if product.quantifiable and not product.pricing == PRICE_USER %}Quantity{% endif %}
+    </div>
+    <div class="col-xs-3">{% if product.pricing == PRICE_MULTIPLE %}Item{% endif %}</div>
+    <div class="col-xs-1">
+      {% if product.pricing == PRICE_USER %}
+        Amount
+      {% else %}
+        Price
+      {% endif %}
+    </div>
+  </div>
+
+  <form method="POST">
+    {% csrf_token %}
+
+    {% for form in forms %}
+
+      <div class="row">
+        {# quantity #}
+        <div class="col-xs-1">
+          {% if product.quantifiable and not product.pricing == PRICE_USER %}
+            {% bootstrap_field form.quantity show_label=False %}
+          {% endif %}
+        </div>
+
+        {# description #}
+        <div class="col-xs-3">
+          {% if product.pricing == PRICE_MULTIPLE %}
+            {{ form.instance.price.name }}
+          {% endif %}
+        </div>
+
+        {# price #}
+        <div class="col-xs-1">
+          {% if product.pricing == PRICE_USER %}
+            {% bootstrap_field form.amount show_label=False %}
+          {% else %}
+            {{ form.instance.price.amount }}
+          {% endif %}
+        </div>
+
+      </div>
+    {% endfor %}
+
+    <button class="btn btn-primary" type="submit">Add to cart</button>
+  </form>
+
+  <div class="row">
+  <div class="col-xs-4">
+  <a href="{% url 'store' %}">Return to store</a>
+  </div>
+  </div>
+
+{% endblock %}

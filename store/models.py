@@ -1,4 +1,6 @@
+from django.core.urlresolvers import reverse
 from django.db import models
+from django.utils.timezone import now
 
 
 class Product(models.Model):
@@ -20,6 +22,11 @@ class Product(models.Model):
         help_text="""A one-line (40 chars or less) text string uniquely identifying the product.
         Example: May 2013 Cantari Concert Ticket""",
         unique=True,
+    )
+    slug = models.SlugField(
+        max_length=40,
+        unique=False,
+        help_text="Unique short string used in URLs related to this product.",
     )
     blurb = models.CharField(
         max_length=128,
@@ -59,7 +66,7 @@ class Product(models.Model):
         default=PRICE_ONE,
         help_text="How this item is priced"
     )
-    prices = models.ManyToManyField('store.Price')
+    prices = models.ManyToManyField('store.Price', blank=True)
     special_instructions_prompt = models.TextField(
         blank=True,
         help_text="""(optional) This is an optional text field. If text is entered here for a product, then
@@ -93,6 +100,9 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
+    def get_absolute_url(self):
+        return reverse('product', args=[self.slug])
+
 
 class Price(models.Model):
     name = models.CharField(
@@ -104,3 +114,29 @@ class Price(models.Model):
 
     def __str__(self):
         return "%s - %s" % (self.name, self.amount)
+
+
+class Sale(models.Model):
+    def count_items(self):
+        count = self.orderline_set.filter(product__quantifiable=False).count()
+        for order_line in self.orderline_set.filter(product__quantifiable=True):
+            count += order_line.quantity
+        return count
+
+
+class OrderLine(models.Model):
+    created_at = models.DateTimeField()
+    product = models.ForeignKey(Product)
+    price = models.ForeignKey(Price, null=True)
+    quantity = models.IntegerField(default=0)
+    amount = models.DecimalField(
+        decimal_places=2,
+        default='0.00',
+        max_digits=8,
+    )
+    sale = models.ForeignKey(Sale, null=True)
+
+    def save(self, *args, **kwargs):
+        if self.created_at is None:
+            self.created_at = now()
+        super().save(*args, **kwargs)

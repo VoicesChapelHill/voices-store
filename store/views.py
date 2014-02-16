@@ -2,7 +2,9 @@ from django.conf import settings
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
-from django.shortcuts import render, redirect
+from django.db.models import Q
+from django.http import Http404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
 # from django.utils.timezone import now
 
@@ -10,8 +12,10 @@ from django.template.loader import render_to_string
 
 # from store.email import send_sale_email
 #from store.forms import BuySomethingForm, DonationForm, MemberLoginForm
-from store.forms import MemberLoginForm, ContactForm
+from django.utils.timezone import now
+from store.forms import MemberLoginForm, ContactForm, OrderLineForm
 # from store.models import Product
+from store.models import Product, OrderLine, Sale
 from store.utils import log_member_in
 from users.views import please_login
 
@@ -39,12 +43,11 @@ def store_view(request):
     #     except Sale.DoesNotExist:
     #         pass
 
-    # TIME = now()
-    # products = Product.objects.filter(
-    #     Q(group__display_end__gte=TIME) | Q(group__display_end__isnull=True),
-    #     group__display_start__lte=TIME,
-    #     group__donation=False,
-    # )
+    TIME = now()
+    products = Product.objects.filter(
+        Q(sell_stop__gte=TIME) | Q(sell_stop=None),
+        Q(sell_start__lte=TIME)|Q(sell_start=None),
+    )
     # donation_products =  Product.objects.filter(
     #     Q(group__display_end__gte=TIME) | Q(group__display_end__isnull=True),
     #     group__display_start__lte=TIME,
@@ -56,7 +59,10 @@ def store_view(request):
         title = 'Member Store'
     else:
         title = 'Voices Store'
-        # products = products.exclude(group__members=True)
+        products = products.exclude(group__members=True)
+
+    if not user.is_authenticated() or not user.is_staff:
+        products = products.exclude(draft=True)
 
     # if request.method == 'POST':
     #     data = request.POST
@@ -116,7 +122,7 @@ def store_view(request):
     #         return redirect('store')
 
     context = {
-        # 'products': products,
+        'products': products,
         # 'donation_products': donation_products,
         'title': title,
         'cart': sale,
@@ -228,3 +234,79 @@ def contact_view(request):
     else:
         form = ContactForm(email=email)
     return render(request, 'contact.html', {'form': form})
+
+
+def product_view(request, slug):
+    product = get_object_or_404(Product, slug=slug)
+    if product.draft and (not request.user.is_authenticated() or not request.user.is_staff):
+        raise Http404
+    if product.member_only and (not request.user.is_authenticated() or not request.user.is_member):
+        raise Http404
+
+    sale_pk = request.session.get('sale_pk', None)
+    if sale_pk:
+        try:
+            sale = Sale.objects.get(pk=sale_pk)
+        except Sale.DoesNotExist:
+            sale = Sale()
+    else:
+        sale = Sale()
+
+    if sale.pk:
+        # See if we have any order lines already saved
+        order_lines = []
+        for price in product.prices.all():
+            try:
+                order_lines.append(OrderLine.objects.get(sale=sale, product=product, price=price))
+            except OrderLine.DoesNotExist:
+                order_lines.append(OrderLine(product=product, price=price))
+        if not order_lines:
+            try:
+                order_lines.append(OrderLine.objects.get(sale=sale, product=product, price=None))
+            except OrderLine.DoesNotExist:
+                order_lines.append(OrderLine(product=product, price=None))
+    else:
+        order_lines = [OrderLine(product=product, price=price) for price in product.prices.all()]
+        if not order_lines:
+            order_lines.append(OrderLine(product=product))
+
+    if request.method == 'POST':
+        forms = [OrderLineForm(instance=x, data=request.POST) for x in order_lines]
+        if all(form.is_valid() for form in forms):
+            print("VALID!")
+            # Did they actually order anything?
+            if any(form.has_any() for form in forms):
+                # YES!
+                # We want a sale!
+                if not sale.pk:
+                    sale = Sale.objects.create()
+                for form in forms:
+                    if form.has_any():
+                        form.instance.sale = sale
+                        form.save()
+            # Did they change any existing items to zero?
+            for form in forms:
+                if not form.has_any():
+                    if form.instance.pk:
+                        form.instance.delete()
+            if sale.pk:
+                request.session['sale_pk'] = sale.pk
+            return redirect(reverse('store'))
+        else:
+            print("SOME FORM IS NOT VALID")
+            for form in forms:
+                print(form.errors)
+    else:
+        forms = [OrderLineForm(instance=x) for x in order_lines]
+
+    context = {
+        'product': product,
+        'forms': forms,
+        'sale': sale,
+        'PRICE_ONE': Product.PRICE_ONE,
+        'PRICE_MULTIPLE': Product.PRICE_MULTIPLE,
+        'PRICE_USER': Product.PRICE_USER,
+    }
+    if sale.pk:
+        request.session['sale_pk'] = sale.pk
+    return render(request, 'store/product.html', context)

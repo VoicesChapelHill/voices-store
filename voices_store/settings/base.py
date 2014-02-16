@@ -105,6 +105,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.static",
     "django.core.context_processors.tz",
     "django.contrib.messages.context_processors.messages",
+    'store.utils.cart_template_context',
     # Required by allauth template tags
     "django.core.context_processors.request",
     # allauth specific context processors
