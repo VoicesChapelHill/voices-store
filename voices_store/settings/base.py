@@ -123,8 +123,11 @@ ACCOUNT_AUTHENTICATION_METHOD = "email"
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
-ACCOUNT_USER_MODEL_USERNAME_FIELD = 'email'
+ACCOUNT_LOGOUT_ON_GET = True
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_USER_DISPLAY = lambda user: user.get_full_name().strip() or user.email
+ACCOUNT_USERNAME_BLACKLIST = ['admin', 'root', 'webmaster', 'postmaster']
+ACCOUNT_USERNAME_REQUIRED = False
 
 LOGIN_REDIRECT_URL = reverse_lazy('logged_in')  # if user hasn't given name, asks them for it
 

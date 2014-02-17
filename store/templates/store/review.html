@@ -2,40 +2,53 @@
 {% block content %}
 <h1>Review selected purchases</h1>
 
-    {% if sale.complete %}
+    {% if sale.status == SALE_COMPLETE %}
     <p>This sale has been completed.
     You can
 <a href="{% url 'store' %}">Return to the Store</a>.
     </p>
     {% else %}
 <p>Here's what you've asked to purchase.</p>
-<p>If you want to make changes, use your browser's Back button to return
-to the previous page.</p>
+<p>If you want to make changes, click the red X to remove an item from your cart,
+  or click the product link to change quantities.</p>
 <p>If you've changed your mind completely, you can
-<a href="{% url 'store' %}">Return to the Store</a>.</p>
+<a href="{% url 'store' %}">Return to the Store</a>
+  or <a href="{% url 'empty' %}">empty your cart</a>.
+  </p>
     {% endif %}
 
 <table border="0" class="table table-striped">
 <thead>
   <tr>
+    <th></th>
     <th>Quantity</th>
     <th>Each</th>
     <th>Subtotal</th>
     <th>Item</th>
-    <th>Description</th>
+    <th>Special instructions</th>
   </tr>
 </thead>
 <tbody>
-    {% for item in sale.items.all %}
+    {% for item in lines %}
         <tr>
+        <td>
+          <form action="{% url 'remove' item.pk %}" method="post">
+            {% csrf_token %}
+            <button type="submit">
+              <span class="remove">
+                <span class="glyphicon glyphicon-remove"></span>
+              </span>
+              </button>
+            </form>
+        </td>
         <td> {# quantity #}
-            {% if not item.product.group.donation %}
+            {% if item.product.quantifiable %}
                 {{ item.quantity }}
             {% endif %}
         </td>
         <td> {# each #}
-            {% if not item.product.group.donation %}
-            ${{ item.per_item_price }}
+            {% if item.product.pricing != PRICE_USER %}
+            ${{ item.price.amount }}
             {% endif %}
         </td>
 
@@ -43,8 +56,17 @@ to the previous page.</p>
            ${{ item.amount }}
         </td>
 
-        <td>{{ item.product.name }}</td>
-        <td>{{ item.product.description }}</td>
+        <td>
+          <a href="{% url 'product' item.product.slug %}">
+            {{ item.product.name }}
+          </a>
+          {% if item.product.pricing == PRICE_MULTIPLE %}
+            / {{ item.price.name }}
+          {% endif %}
+        </td>
+        <td>
+          {{ item.special_instructions }}
+        </td>
         </tr>
     {% endfor %}
 </tbody>

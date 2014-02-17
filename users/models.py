@@ -74,3 +74,6 @@ class VoicesUser(AbstractBaseUser, PermissionsMixin):
     def is_complete(self):
         """Has user filled in all the fields we want them to?"""
         return all([getattr(self, name, None) for name in self.DESIRED_FIELDS])
+
+    def __str__(self):
+        return self.get_full_name().strip() or self.email

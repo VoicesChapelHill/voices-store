@@ -1,5 +1,7 @@
+from decimal import Decimal
 from django.core.urlresolvers import reverse
 from django.db import models
+from django.db.models import Sum
 from django.utils.timezone import now
 
 
@@ -117,11 +119,25 @@ class Price(models.Model):
 
 
 class Sale(models.Model):
+    SALE_PENDING = 1
+    SALE_COMPLETE = 2
+    SALE_STATUSES = (
+        (SALE_PENDING, "Pending"),
+        (SALE_COMPLETE, "Complete"),
+    )
+    status = models.IntegerField(choices=SALE_STATUSES, default=SALE_PENDING)
+
     def count_items(self):
         count = self.orderline_set.filter(product__quantifiable=False).count()
         for order_line in self.orderline_set.filter(product__quantifiable=True):
             count += order_line.quantity
         return count
+
+    def total(self):
+        return self.orderline_set.all().aggregate(sum=Sum('amount'))['sum']
+
+    def is_empty(self):
+        return self.orderline_set.count() == 0 or self.total() == Decimal('0.00')
 
 
 class OrderLine(models.Model):
@@ -133,10 +149,16 @@ class OrderLine(models.Model):
         decimal_places=2,
         default='0.00',
         max_digits=8,
+        verbose_name='$',
     )
+    special_instructions = models.TextField(blank=True)
     sale = models.ForeignKey(Sale, null=True)
 
     def save(self, *args, **kwargs):
         if self.created_at is None:
             self.created_at = now()
+        if not self.product.quantifiable:
+            self.quantity = 1
+        if self.product.pricing != Product.PRICE_USER:
+            self.amount = self.price.amount * self.quantity
         super().save(*args, **kwargs)

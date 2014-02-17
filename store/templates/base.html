@@ -44,7 +44,7 @@
             <li><a href="{% url 'store' %}">Store</a></li>
             {% if user.is_authenticated %}
               <li><a href="{% url 'account_logout' %}">Log out</a>
-              <li><a href="{% url 'profile' user.pk %}">{{ user }}</a></li>
+              <li><a href="{% url 'profile' user.pk %}">{{ user.get_full_name }}<br>{{ user.email }}</a></li>
               {% if user.voices_staff %}
                   <li><a href="{% url 'staff_home' %}">Staff home</a></li>
               {% endif %}
@@ -55,21 +55,18 @@
               <li><a href="{% url 'account_login' %}">Log in</a></li>
             {% endif %}
 
-            {% if cart %}
-              <li>
-                <span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;
-                <a href="{% url 'review' %}">{{ cart.num_items }} item{{ cart.num_items|pluralize }}</a>
-              </li>
-            {% endif %}
             {% if not user.is_member %}
               <li><a href="{% url 'member_login' next=request.path %}">Members</a></li>
             {% endif %}
-            <li>
-              <a href="">
-                <span class="glyphicon glyphicon-shopping-cart"></span>
-                {{ sale.count_items }} item{{ sale.count_items|pluralize }}
-              </a>
-            </li>
+            {% if sale %}
+              <li>
+                <a href="{% url 'review' %}">
+                  <span class="glyphicon glyphicon-shopping-cart"></span>
+                  {{ sale.count_items }} item{{ sale.count_items|pluralize }}
+                  {% if sale.count_items %}${{ sale.total }}{% endif %}
+                </a>
+              </li>
+            {% endif %}
           </ul>
         </div><!--/.nav-collapse -->
       </div>

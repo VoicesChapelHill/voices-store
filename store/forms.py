@@ -64,22 +64,32 @@ class OrderLineForm(forms.ModelForm):
 
     class Meta(object):
         model = OrderLine
-        fields = ['quantity', 'amount']
+        fields = ['quantity', 'amount', 'special_instructions']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        product = self.instance.product
         if not self.prefix:
             if self.instance.price:
-                self.prefix = '%s_%s' % (self.instance.product.pk, self.instance.price.pk)
+                self.prefix = '%s_%s' % (product.pk, self.instance.price.pk)
             else:
-                self.prefix = '%s' % (self.instance.product.pk, )
-        if self.instance.product.pricing != Product.PRICE_USER:
+                self.prefix = '%s' % (product.pk, )
+        if product.pricing != Product.PRICE_USER:
             del self.fields['amount']
-        if not self.instance.product.quantifiable:
+        if not product.quantifiable:
             del self.fields['quantity']
+            # self.fields['quantity'].widget = forms.HiddenInput()
+            # self.initial['quantity'] = 1
+        if product.special_instructions_prompt:
+            self.fields['special_instructions'].label = product.special_instructions_prompt
+            self.fields['special_instructions'].required = True
+        else:
+            del self.fields['special_instructions']
 
     def has_any(self):
         if self.instance.product.pricing == Product.PRICE_USER:
             return self.cleaned_data['amount'] != Decimal('0.00')
-        else:
+        elif self.instance.product.quantifiable:
             return self.cleaned_data['quantity'] != 0
+        else:
+            return True

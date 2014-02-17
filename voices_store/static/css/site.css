@@ -10,7 +10,7 @@ body {
   font-weight: bold;
 }
 
-.draft {
+.draft, .remove {
     color: red;
 }
 
