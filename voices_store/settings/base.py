@@ -16,7 +16,6 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = (
     # This project: (first so our templates etc override other modules')
-    'accounting',
     'store',
     'staff',
     'users',

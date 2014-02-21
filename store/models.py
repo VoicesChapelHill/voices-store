@@ -91,13 +91,6 @@ class Product(models.Model):
     This is also intended to cope with people paying dues, to force them to enter
     a separate name for each dues payment.""",
     )
-    account = models.ForeignKey(
-        'accounting.Account',
-    )
-    klass = models.ForeignKey(
-        'accounting.Klass',
-        verbose_name='class',
-    )
 
     def __str__(self):
         return self.name
