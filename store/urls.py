@@ -1,6 +1,7 @@
 from django.conf.urls import patterns, url
 
-from store.views import empty_view, review_view, remove_view, store_view, member_login, help_view, contact_view, product_view
+from store.views import (empty_view, review_view, remove_view, store_view, member_login,
+                         help_view, contact_view, product_view)
 
 urlpatterns = patterns(
     '',

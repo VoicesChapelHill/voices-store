@@ -1,10 +1,10 @@
 """
 Test store views that aren't tested elsewhere
 """
-from datetime import timedelta
+# from datetime import timedelta
 from django.core.urlresolvers import reverse
 from django.test import TestCase
-from django.utils.timezone import now
+# from django.utils.timezone import now
 import mock
 from model_mommy import mommy
 from store.models import Product
@@ -13,19 +13,19 @@ from store.models import Product
 class TestStoreView(TestCase):
     def setUp(self):
         self.url = reverse('store')
-        self.member_url = reverse('member_view')
-        self.public_group = ProductGroup.objects.create(
-            display_start=now(),
-            display_end=now() + timedelta(days=2),
-            public=True,
-            members=False
-        )
-        self.member_group = ProductGroup.objects.create(
-            display_start=now(),
-            display_end=now() + timedelta(days=2),
-            public=False,
-            members=True
-        )
+        # self.member_url = reverse('member_view')
+        # self.public_group = ProductGroup.objects.create(
+        #     display_start=now(),
+        #     display_end=now() + timedelta(days=2),
+        #     public=True,
+        #     members=False
+        # )
+        # self.member_group = ProductGroup.objects.create(
+        #     display_start=now(),
+        #     display_end=now() + timedelta(days=2),
+        #     public=False,
+        #     members=True
+        # )
 
     @mock.patch('store.views.member_is_logged_in')
     def test_member_not_logged_in(self, mock_member_is_logged_in):

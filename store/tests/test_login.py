@@ -2,11 +2,10 @@ from django.contrib.sessions.models import Session
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.test.utils import override_settings
-from mock import Mock
 import mock
 
 from store.forms import MemberLoginForm
-from store.utils import log_member_in
+#from store.utils import log_member_in
 
 
 # class LoginUtilsTest(TestCase):

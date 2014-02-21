@@ -43,8 +43,8 @@ def member_login(request, next):
 def store_view(request):
     user = request.user
     TIME = now()
-    query = ((Q(sell_stop__gte=TIME)|Q(sell_stop=None))
-             & (Q(sell_start__lte=TIME)|Q(sell_start=None)))
+    query = ((Q(sell_stop__gte=TIME) | Q(sell_stop=None))
+             & (Q(sell_start__lte=TIME) | Q(sell_start=None)))
     if user.is_authenticated() and user.voices_staff:
         query |= Q(draft=True)
     products = Product.objects.filter(query)

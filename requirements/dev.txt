@@ -1,11 +1,11 @@
 -r base.txt
+coverage==3.7.1
 django-debug-toolbar==0.11.0
 Mock==1.0.1
 model_mommy==1.2
 Sphinx==1.2.1
 
-
-
+# Dependencies of packages above
 Jinja2==2.7.2
 MarkupSafe==0.18
 Pygments==1.6
