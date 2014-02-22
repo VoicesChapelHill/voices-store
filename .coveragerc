@@ -1,0 +1,8 @@
+[run]
+source =
+    staff
+    store
+    users
+
+[report]
+fail_under = 95

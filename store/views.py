@@ -169,7 +169,7 @@ def contact_view(request):
         form = ContactForm(email=email, data=request.POST)
         if form.is_valid():
             subject = "Contact form: %s" % form.cleaned_data['subject']
-            email = email or form.cleaned_data['email_address']
+            email = form.cleaned_data['email_address']
             body = render_to_string('emails/contact_form.txt',
                                     {'body': form.cleaned_data['body'],
                                      'email': email,

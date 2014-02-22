@@ -45,19 +45,25 @@ class ContactForm(SetFieldClassesMixin, forms.Form):
             self.email = email
             del self.fields['email_address']
 
-
-class ProductForm(forms.ModelForm):
-    class Meta(object):
-        model = Product
-
     def clean(self):
-        if 'quantifiable' in self.cleaned_data and 'pricing' in self.cleaned_data:
-            quantifiable = self.cleaned_data['quantifiable']
-            pricing = self.cleaned_data['pricing']
-            if pricing == Product.PRICE_USER and quantifiable:
-                # Just force quantifiable
-                self.cleaned_data['quantifiable'] = False
+        if hasattr(self, 'email'):
+            self.cleaned_data['email_address'] = self.email
         return self.cleaned_data
+
+
+# Currently UNUSED
+# class ProductForm(forms.ModelForm):
+#     class Meta(object):
+#         model = Product
+#
+#     def clean(self):
+#         if 'quantifiable' in self.cleaned_data and 'pricing' in self.cleaned_data:
+#             quantifiable = self.cleaned_data['quantifiable']
+#             pricing = self.cleaned_data['pricing']
+#             if pricing == Product.PRICE_USER and quantifiable:
+#                 # Just force quantifiable
+#                 self.cleaned_data['quantifiable'] = False
+#         return self.cleaned_data
 
 
 class OrderLineForm(forms.ModelForm):
@@ -71,9 +77,9 @@ class OrderLineForm(forms.ModelForm):
         product = self.instance.product
         if not self.prefix:
             if self.instance.price:
-                self.prefix = '%s_%s' % (product.pk, self.instance.price.pk)
+                self.prefix = '%s_%s' % (product.slug, str(self.instance.price.pk))
             else:
-                self.prefix = '%s' % (product.pk, )
+                self.prefix = '%s' % (product.slug)
         if product.pricing != Product.PRICE_USER:
             del self.fields['amount']
         if not product.quantifiable:
@@ -87,6 +93,8 @@ class OrderLineForm(forms.ModelForm):
             del self.fields['special_instructions']
 
     def has_any(self):
+        if not self.is_bound:
+            raise ValueError("It makes no sense to call has_any on an unbound field")
         if self.instance.product.pricing == Product.PRICE_USER:
             return self.cleaned_data['amount'] != Decimal('0.00')
         elif self.instance.product.quantifiable:

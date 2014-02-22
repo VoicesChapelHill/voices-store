@@ -26,7 +26,6 @@ class Product(models.Model):
         unique=True,
     )
     slug = models.SlugField(
-        max_length=40,
         unique=False,
         help_text="Unique short string used in URLs related to this product.",
     )
