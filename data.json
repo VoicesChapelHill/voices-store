@@ -1,0 +1,306 @@
+[
+{
+  "pk": 1, 
+  "model": "store.product", 
+  "fields": {
+    "pricing": 1, 
+    "member_only": true, 
+    "sell_start": null, 
+    "slug": "black-concert-folder", 
+    "blurb": "Use this folder to hold your music during a performance.", 
+    "prices": [
+      2
+    ], 
+    "description": "Members must hold their music in a black folder during performances. Members can use any black folder, but this one is inexpensive and works reasonably well.", 
+    "special_instructions_prompt": "", 
+    "quantifiable": true, 
+    "sell_stop": null, 
+    "draft": true, 
+    "name": "Black concert folder"
+  }
+},
+{
+  "pk": 2, 
+  "model": "store.product", 
+  "fields": {
+    "pricing": 2, 
+    "member_only": false, 
+    "sell_start": null, 
+    "slug": "mar-2014-cantari-concert-ticket", 
+    "blurb": "Gems from British Cathedrals", 
+    "prices": [
+      1, 
+      4
+    ], 
+    "description": "Join us in celebrating the 20th century English choral tradition with works including Gerald Finzi\u2019s \u201cLo, the Full, Final Sacrifice\u201d and the serene a cappella Requiem by Herbert Howells.\r\n\r\nSaturday, March 8, 2014,  7:30 pm\r\n\r\nChapel Of The Cross\r\n304 East Franklin Street, Chapel Hill", 
+    "special_instructions_prompt": "", 
+    "quantifiable": true, 
+    "sell_stop": "2014-03-07T12:00:00Z", 
+    "draft": false, 
+    "name": "March 2014 Cantari Concert Ticket"
+  }
+},
+{
+  "pk": 3, 
+  "model": "store.product", 
+  "fields": {
+    "pricing": 3, 
+    "member_only": false, 
+    "sell_start": null, 
+    "slug": "donation", 
+    "blurb": "Help support the chorus.", 
+    "prices": [], 
+    "description": "", 
+    "special_instructions_prompt": "", 
+    "quantifiable": false, 
+    "sell_stop": null, 
+    "draft": false, 
+    "name": "Donation"
+  }
+},
+{
+  "pk": 4, 
+  "model": "store.product", 
+  "fields": {
+    "pricing": 1, 
+    "member_only": true, 
+    "sell_start": null, 
+    "slug": "spring-2014-voices-dues", 
+    "blurb": "Dues and music for spring 2014 Voices members", 
+    "prices": [
+      5
+    ], 
+    "description": "Dues: $60 Music: $25 Total: $85", 
+    "special_instructions_prompt": "Please enter the name of the member the dues are being paid for.", 
+    "quantifiable": false, 
+    "sell_stop": "2014-02-28T23:59:59Z", 
+    "draft": true, 
+    "name": "Spring 2014 Voices Dues"
+  }
+},
+{
+  "pk": 1, 
+  "model": "store.price", 
+  "fields": {
+    "amount": "15.00", 
+    "name": "General Admission"
+  }
+},
+{
+  "pk": 2, 
+  "model": "store.price", 
+  "fields": {
+    "amount": "14.00", 
+    "name": "Black concert folder"
+  }
+},
+{
+  "pk": 4, 
+  "model": "store.price", 
+  "fields": {
+    "amount": "6.00", 
+    "name": "Student"
+  }
+},
+{
+  "pk": 5, 
+  "model": "store.price", 
+  "fields": {
+    "amount": "85.00", 
+    "name": "Dues and music 85"
+  }
+},
+{
+  "pk": 1, 
+  "model": "store.sale", 
+  "fields": {
+    "status": 1
+  }
+},
+{
+  "pk": 2, 
+  "model": "store.sale", 
+  "fields": {
+    "status": 1
+  }
+},
+{
+  "pk": 2, 
+  "model": "store.orderline", 
+  "fields": {
+    "created_at": "2014-02-17T11:50:11.933Z", 
+    "sale": 1, 
+    "amount": "30.00", 
+    "price": 1, 
+    "special_instructions": "", 
+    "product": 2, 
+    "quantity": 2
+  }
+},
+{
+  "pk": 3, 
+  "model": "store.orderline", 
+  "fields": {
+    "created_at": "2014-02-17T12:08:10.498Z", 
+    "sale": 1, 
+    "amount": "85.00", 
+    "price": 5, 
+    "special_instructions": "George", 
+    "product": 4, 
+    "quantity": 1
+  }
+},
+{
+  "pk": 4, 
+  "model": "store.orderline", 
+  "fields": {
+    "created_at": "2014-02-17T12:09:22.466Z", 
+    "sale": 1, 
+    "amount": "6.00", 
+    "price": 4, 
+    "special_instructions": "", 
+    "product": 2, 
+    "quantity": 1
+  }
+},
+{
+  "pk": 5, 
+  "model": "store.orderline", 
+  "fields": {
+    "created_at": "2014-02-17T12:17:54.696Z", 
+    "sale": 1, 
+    "amount": "85.00", 
+    "price": 5, 
+    "special_instructions": "Sam", 
+    "product": 4, 
+    "quantity": 1
+  }
+},
+{
+  "pk": 6, 
+  "model": "store.orderline", 
+  "fields": {
+    "created_at": "2014-02-17T12:33:32.520Z", 
+    "sale": 2, 
+    "amount": "15.00", 
+    "price": 1, 
+    "special_instructions": "", 
+    "product": 2, 
+    "quantity": 1
+  }
+},
+{
+  "pk": 1, 
+  "model": "sites.site", 
+  "fields": {
+    "domain": "0.0.0.0:8000", 
+    "name": "0.0.0.0:8000"
+  }
+},
+{
+  "pk": 2, 
+  "model": "sites.site", 
+  "fields": {
+    "domain": "test.chapelhillcommunitychorus.org", 
+    "name": "test.chapelhillcommunitychorus.org"
+  }
+},
+{
+  "pk": 1, 
+  "model": "account.emailconfirmation", 
+  "fields": {
+    "email_address": 1, 
+    "key": "e07525ae7922f21eb873a1fde6251d751e6e918200792a54c68b4174a8bf28bd", 
+    "sent": "2014-02-15T21:58:25.524Z", 
+    "created": "2014-02-15T21:58:25.272Z"
+  }
+},
+{
+  "pk": 2, 
+  "model": "account.emailconfirmation", 
+  "fields": {
+    "email_address": 2, 
+    "key": "51ab02dc8672321ad9f5ce9d976908ffd29048964125b88a34accf09f6bc76e2", 
+    "sent": "2014-02-15T22:39:55.202Z", 
+    "created": "2014-02-15T22:39:55.062Z"
+  }
+},
+{
+  "pk": 4, 
+  "model": "account.emailconfirmation", 
+  "fields": {
+    "email_address": 4, 
+    "key": "5d53999d32f8cd6ffbaa4669765190b7eec1104b38a0cf6fe4066e659cb587b5", 
+    "sent": "2014-02-17T00:01:31.944Z", 
+    "created": "2014-02-17T00:01:31.751Z"
+  }
+},
+{
+  "pk": 1, 
+  "model": "users.voicesuser", 
+  "fields": {
+    "first_name": "Dan", 
+    "is_staff": true, 
+    "is_member": true, 
+    "last_name": "Poirier", 
+    "is_active": true, 
+    "email": "dan.poirier@voiceschapelhill.org", 
+    "groups": [], 
+    "date_joined": "2014-02-09T00:06:53Z", 
+    "user_permissions": [], 
+    "is_superuser": true, 
+    "voices_staff": true, 
+    "password": "pbkdf2_sha256$12000$J6pKRTwJykwy$v4MWkFsjwiYBnXwIJbNkH19BMrvyCxB2H1+x9x678SM=", 
+    "last_login": "2014-02-17T12:33:45.026Z"
+  }
+},
+{
+  "pk": 4, 
+  "model": "users.voicesuser", 
+  "fields": {
+    "first_name": "Dan 2", 
+    "is_staff": false, 
+    "is_member": false, 
+    "last_name": "Poirier", 
+    "is_active": true, 
+    "email": "dan+2@poirier.us", 
+    "groups": [], 
+    "date_joined": "2014-02-17T00:01:31.507Z", 
+    "user_permissions": [], 
+    "is_superuser": false, 
+    "voices_staff": false, 
+    "password": "pbkdf2_sha256$12000$2z0QPT3FjDZq$d6qpoeFRxb8XOGXhAErlZI4DA9cN0PJUvLaNdCPlgQY=", 
+    "last_login": "2014-02-17T00:01:44.393Z"
+  }
+},
+{
+  "pk": 1, 
+  "model": "account.emailaddress", 
+  "fields": {
+    "primary": false, 
+    "verified": true, 
+    "user": 1, 
+    "email": "dan@poirier.us"
+  }
+},
+{
+  "pk": 2, 
+  "model": "account.emailaddress", 
+  "fields": {
+    "primary": true, 
+    "verified": true, 
+    "user": 1, 
+    "email": "dan.poirier@voiceschapelhill.org"
+  }
+},
+{
+  "pk": 4, 
+  "model": "account.emailaddress", 
+  "fields": {
+    "primary": true, 
+    "verified": true, 
+    "user": 4, 
+    "email": "dan+2@poirier.us"
+  }
+}
+]
