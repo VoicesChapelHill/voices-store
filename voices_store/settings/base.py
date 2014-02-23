@@ -206,5 +206,17 @@ elif SITE_ID == 2:
     STRIPE_PUBLISHABLE_KEY = os.environ['STRIPE_PUBLISHABLE_KEY']
     MEMBER_PASSWORD = os.environ['MEMBER_PASSWORD']
     SECRET_KEY = os.environ['SECRET_KEY']
+elif SITE_ID == 3:
+    # voices-store.dokku.poirier.us
+    INTERNAL_IPS = ['24.225.71.109']
+    ACCOUNT_EMAIL_SUBJECT_PREFIX = '[Voices store (voices-store.dokku.poirier.us)] '
+
+    import dj_database_url
+
+    DATABASES = {'default': dj_database_url.config()}
+    STRIPE_SECRET_KEY = os.environ['STRIPE_SECRET_KEY']
+    STRIPE_PUBLISHABLE_KEY = os.environ['STRIPE_PUBLISHABLE_KEY']
+    MEMBER_PASSWORD = os.environ['MEMBER_PASSWORD']
+    SECRET_KEY = os.environ['SECRET_KEY']
 else:
     raise ImproperlyConfigured("Unknown SITE_ID %s set in environment" % SITE_ID)
