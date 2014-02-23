@@ -9,6 +9,8 @@ https://docs.djangoproject.com/en/1.6/howto/deployment/wsgi/
 import logging
 import os
 
+print("os.environ['DATABASE_URL']=%r" % os.environ.get('DATABASE_URL', None))
+
 logger = logging.getLogger(__name__)
 
 logger.info("In voices_store/wsgi.py")

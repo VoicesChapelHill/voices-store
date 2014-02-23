@@ -2,8 +2,11 @@ from .base import *
 
 import dj_database_url
 import logging
+import os
 
 print("This is settings.dokku")
+
+print("os.environ['DATABASE_URL']=%r" % os.environ.get('DATABASE_URL', None))
 
 DATABASES = {'default': dj_database_url.config()}
 STRIPE_SECRET_KEY = os.environ['STRIPE_SECRET_KEY']
