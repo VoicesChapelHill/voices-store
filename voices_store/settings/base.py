@@ -197,6 +197,7 @@ if SITE_ID == 1:
 elif SITE_ID == 2:
     # test.chapelhillcommunitychorus.org
     INTERNAL_IPS = ['24.225.71.109']
+    ALLOWED_HOSTS = ['test.chapelhillcommunitychorus.org']
     ACCOUNT_EMAIL_SUBJECT_PREFIX = '[Voices store (test.chapelhillcommunitychorus.org)] '
 
     import dj_database_url
@@ -209,6 +210,7 @@ elif SITE_ID == 2:
 elif SITE_ID == 3:
     # voices-store.dokku.poirier.us
     INTERNAL_IPS = ['24.225.71.109']
+    ALLOWED_HOSTS = ['voices-store.dokku.poirier.us']
     ACCOUNT_EMAIL_SUBJECT_PREFIX = '[Voices store (voices-store.dokku.poirier.us)] '
 
     import dj_database_url

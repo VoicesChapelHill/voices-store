@@ -3,6 +3,8 @@ from .base import *
 import dj_database_url
 import logging
 
+print("This is settings.dokku")
+
 DATABASES = {'default': dj_database_url.config()}
 STRIPE_SECRET_KEY = os.environ['STRIPE_SECRET_KEY']
 STRIPE_PUBLISHABLE_KEY = os.environ['STRIPE_PUBLISHABLE_KEY']
@@ -29,3 +31,5 @@ LOGGING = {
         },
     }
 }
+
+print("DATABASES=%r" % DATABASES)
