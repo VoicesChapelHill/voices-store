@@ -14,5 +14,13 @@
       "name": "test.chapelhillcommunitychorus.org"
     },
     "pk": 2
+  },
+  {
+    "model": "sites.site",
+    "fields": {
+      "domain": "voices-store.dokku.poirier.us",
+      "name": "voices-store.dokku.poirier.us"
+    },
+    "pk": 3
   }
 ]
